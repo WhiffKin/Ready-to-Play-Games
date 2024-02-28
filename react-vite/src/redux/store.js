@@ -9,6 +9,7 @@ import sessionReducer from "./session";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  users: userReducer,
 });
 
 let enhancer;
