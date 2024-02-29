@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'profile_pic': self.profile_pic
+            'profilePic': self.profile_pic
         }
     
     def to_dict_all(self): 
@@ -38,10 +38,10 @@ class User(db.Model, UserMixin):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
+            'firstName': self.first_name,
+            'lastName': self.last_name,
             'description': self.description,
-            'profile_pic': self.profile_pic
+            'profilePic': self.profile_pic
         }
 
     # Getters/Setters:
