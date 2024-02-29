@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --watch",
-    "build_prod": "CI=false && react-scripts build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -18,7 +17,8 @@
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.15.0",
     "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^2.4.2",
+    "reselect": "^5.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
