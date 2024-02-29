@@ -1,4 +1,4 @@
-import { createSelector } from "react-redux";
+import { createSelector } from "reselect";
 
 // Custom Selectors
 export const selectIndividualUser = (userId) => 
@@ -18,17 +18,17 @@ const ADD_USER = "users/ADD_USER";
 
 // Action Creators
 const addUsers = (users) => ({
-    action: ADD_USERS, 
+    type: ADD_USERS, 
     payload: users
 })
 const addUser = (user) => ({
-    action: ADD_USER,
+    type: ADD_USER,
     payload: user
 })
 
 // Thunks
 export const thunkAddUsers = () => async (dispatch) => {
-    const response = await fetch("/users");
+    const response = await fetch("/api/users");
 
     const data = await response.json();
     if (response.ok) {
@@ -38,7 +38,7 @@ export const thunkAddUsers = () => async (dispatch) => {
     return data;
 }
 export const thunkAddUser = (userId) => async (dispatch) => {
-    const response = await fetch(`/users/${userId}`);
+    const response = await fetch(`/api/users/${userId}`);
 
     const data = await response.json();
     if (response.ok) {
@@ -50,15 +50,19 @@ export const thunkAddUser = (userId) => async (dispatch) => {
 
 // Reducer
 const initialState = {}
-export default userReducer = (state = initialState, action) => {
+function userReducer (state = initialState, action) {
     let newState = { ...state };
     switch (action.type) {
         case ADD_USER:
             newState[action.payload.id] = action.payload;
             return newState;
         case ADD_USERS:
-            return { ...action.payload.reduce((acc, user) => acc[user.id] = user, {}) };
+            return { ...action.payload.users.reduce((acc, user) => {
+                acc[user.id] = user;
+                return acc
+            }, {}) };
         default:
             return state;
     }
 }
+export default userReducer;

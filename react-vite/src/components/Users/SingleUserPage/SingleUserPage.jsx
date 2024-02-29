@@ -6,12 +6,13 @@ import { selectIndividualUser, thunkAddUser } from "../../../redux/user";
 const SingleUserPage = () => {
     const { userId } = useParams();
     const dispatch = useDispatch();
-    const user = useSelector(selectIndividualUser());
+    const user = useSelector(selectIndividualUser(userId));
 
     useEffect(() => {
         dispatch(thunkAddUser(userId));
     }, [])
 
+    console.log(user)
     if (!user) return <h1>Loading user...</h1>
     return (
         <>

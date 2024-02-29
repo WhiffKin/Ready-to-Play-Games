@@ -12,10 +12,10 @@ const UsersPage = () => {
         dispatch(thunkAddUsers())
     }, []);
 
-    if (!users) return <h1>Loading Users...</h1>
+    if (!users.length) return <h1>Loading Users...</h1>
     return (
         <>
-            {users.reduce((acc, user) => (
+            {users.map(user => (
                 <div key={user.id} onClick={() => navigate(`/users/${user.id}`)}>
                     <img src={user.profile_pic} alt={`${user.username} profile picture.`} />
                     <span>{user.username}</span>

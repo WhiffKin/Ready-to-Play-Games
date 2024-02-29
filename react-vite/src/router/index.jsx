@@ -3,6 +3,7 @@ import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
 import Layout from './Layout';
 import UsersPage from '../components/Users/UsersPage';
+import SingleUserPage from '../components/Users/SingleUserPage';
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ export const router = createBrowserRouter([
         element: <UsersPage />,
       },
       {
-        path: "users/:id",
+        path: "users/:userId",
         element: <SingleUserPage />,
       },
     ],
