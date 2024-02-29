@@ -3,25 +3,26 @@ from enum import Enum
 
 class Class(Enum):
     Monk="Monk"
-    Sorcerer="Sorcerer"
     Paladin="Paladin"
     Ranger="Ranger"
+    Sorcerer="Sorcerer"
 
 class Alignment(Enum):
-    Lawful_Good="Lawful Good"
-    Chaotic_Good="Chaotic Good"
-    Lawful_Neutral="Lawful Neutral"
-    Chaotic_Neutral="Chaotic Neutral"
-    Lawful_Evil="Lawful Evil"
-    Chaotic_Evil="Chaotic Evil"
+    Lawful_Good="Lawful_Good"
+    Chaotic_Good="Chaotic_Good"
+    Lawful_Neutral="Lawful_Neutral"
+    Chaotic_Neutral="Chaotic_Neutral"
+    Lawful_Evil="Lawful_Evil"
+    Chaotic_Evil="Chaotic_Evil"
 
 class Character(db.Model):
-    __tablename__ = 'Characters'
+    __tablename__ = 'characters'
 
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
     name = db.Column(db.String(80), nullable=False, unique=True)
     sprite = db.Column(db.String(), nullable=False)
     strength = db.Column(db.Integer, nullable=False)
@@ -29,9 +30,9 @@ class Character(db.Model):
     wisdom = db.Column(db.Integer, nullable=False)
     charisma = db.Column(db.Integer, nullable=False)
     experience = db.Column(db.Integer, nullable=False)
-    alignmant = db.Column(db.Enum(Class), nullable=False)
+    alignment = db.Column(db.Enum(Alignment), nullable=False)
     class_type = db.Column(db.Enum(Class), nullable=False)
-    description = db.Column(db.text)
+    description = db.Column(db.Text)
 
     # Relationships:
     ## Many to Many: 
@@ -49,8 +50,7 @@ class Character(db.Model):
             'id': self.id,
             'name': self.name,
             'sprite': self.sprite,
-            'description': self.description,
-            'profilePic': self.profile_pic
+            'classType': self.class_type.name,
         }
     
     def to_dict_stats(self): 
@@ -58,9 +58,12 @@ class Character(db.Model):
             'id': self.id,
             'name': self.name,
             'sprite': self.sprite,
+            'description': self.description,
             'strength': self.strength,
             'dexterity': self.dexterity,
             'wisdom': self.wisdom,
             'charisma': self.charisma,
             'experience': self.experience,
+            'aliginment': self.aliginment.name,
+            'classType': self.class_type.name,
         }

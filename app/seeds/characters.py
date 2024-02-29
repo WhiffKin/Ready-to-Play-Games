@@ -3,15 +3,10 @@ from sqlalchemy.sql import text
 
 
 # Adds a demo user, you can add other characters here if you want
-def seed_characters():
-    demo = User(
-        username='Demo', email='demo@aa.io', password='password', )
-    marnie = User(
-        username='marnie', email='marnie@aa.io', password='password')
-    bobbie = User(
-        username='bobbie', email='bobbie@aa.io', password='password')
-    character = Character
+def seed_characters(all_users):
+    character = Character(name="Test Character", sprite="No Image", strength=10, dexterity=10, wisdom=10, charisma=10, experience=10, alignment="Lawful_Neutral", class_type="Monk", description="I am but a humble test character who will be removed from a production environment.", user=all_users[0])
 
+    db.session.add(character)
     db.session.commit()
 
 

@@ -4,6 +4,7 @@ import SignupFormPage from '../components/SignupFormPage';
 import Layout from './Layout';
 import UsersPage from '../components/Users/UsersPage';
 import SingleUserPage from '../components/Users/SingleUserPage';
+import CharactersPage from '../components/Characters/CharactersPage';
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
         path: "users/:userId",
         element: <SingleUserPage />,
       },
+      {
+        path: "characters",
+        element: <CharactersPage />
+      }
     ],
   },
 ]);
