@@ -20,9 +20,15 @@ class User(db.Model, UserMixin):
 
     # Relationships:
     ## Many to Many:
-    # characters
     # campaigns
     # fave_campaigns
+
+    ## One to Many:
+    characters = db.relationship(
+        "Character",
+        back_populates="user",
+        cascade="all, delete"
+    )
 
     # To Dictionary Methods:
     def to_dict(self):
