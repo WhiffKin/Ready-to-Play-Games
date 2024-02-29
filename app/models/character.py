@@ -56,6 +56,7 @@ class Character(db.Model):
     def to_dict_stats(self): 
         return {
             'id': self.id,
+            'userId': self.user_id,
             'name': self.name,
             'sprite': self.sprite,
             'description': self.description,
@@ -64,6 +65,6 @@ class Character(db.Model):
             'wisdom': self.wisdom,
             'charisma': self.charisma,
             'experience': self.experience,
-            'aliginment': self.aliginment.name,
+            'alignment': self.alignment.name,
             'classType': self.class_type.name,
         }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectCharArray, thunkAddCharacters } from "../../../redux/character";
+import { selectCharArray, thunkGetCharacters } from "../../../redux/character";
 
 function CharactersPage() {
     const dispatch = useDispatch();
@@ -9,7 +9,7 @@ function CharactersPage() {
     const characters = useSelector(selectCharArray());
 
     useEffect(() => {
-        dispatch(thunkAddCharacters());
+        dispatch(thunkGetCharacters());
     }, [])
 
     if (!characters.length) return <h1>Loading Characters...</h1>

@@ -5,6 +5,7 @@ import Layout from './Layout';
 import UsersPage from '../components/Users/UsersPage';
 import SingleUserPage from '../components/Users/SingleUserPage';
 import CharactersPage from '../components/Characters/CharactersPage';
+import SingleCharacterPage from '../components/Characters/SingleCharacterPage';
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +34,11 @@ export const router = createBrowserRouter([
       {
         path: "characters",
         element: <CharactersPage />
-      }
+      },
+      {
+        path: "characters/:charId",
+        element: <SingleCharacterPage />
+      },
     ],
   },
 ]);
