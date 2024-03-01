@@ -13,8 +13,7 @@ const SingleCharacterPage = () => {
         dispatch(thunkGetCharacterById(charId));
     }, [])
 
-    console.log(char)
-    if (!char && !char.strength) return <h1>Loading char...</h1>
+    if (!char && !char?.strength) return <h1>Loading char...</h1>
     return (
         <>
             <div>
