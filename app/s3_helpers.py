@@ -1,10 +1,6 @@
 import boto3
-import botocore
 import os
 import uuid
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import SubmitField
 
 
 s3 = boto3.client(
@@ -12,8 +8,6 @@ s3 = boto3.client(
    aws_access_key_id=os.environ.get("S3_UPLOADACCESSKEY"),
    aws_secret_access_key=os.environ.get("S3_UPLOADSECRETACCESSKEY")
 )
-
-
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 

@@ -55,5 +55,4 @@ const names = [
     "Findlay",
     "Zecheriah"
 ]
-const randName = () => names[Math.floor(Math.random() * names.length)];
-export default randName;
+export default names;

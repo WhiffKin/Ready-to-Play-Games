@@ -48,7 +48,7 @@ class Character(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'name': self.name,
+            'name': self.name.rsplit(",")[1],
             'sprite': self.sprite,
             'classType': self.class_type.name,
         }
@@ -57,7 +57,7 @@ class Character(db.Model):
         return {
             'id': self.id,
             'userId': self.user_id,
-            'name': self.name,
+            'name': self.name.rsplit(",")[1],
             'sprite': self.sprite,
             'description': self.description,
             'strength': self.strength,

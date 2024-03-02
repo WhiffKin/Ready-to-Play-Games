@@ -17,7 +17,7 @@ def test_alignment(_form, field):
     alignment = field.data
     if alignment not in (
            ["Lawful_Good",
-            "Chaotic_Good"
+            "Chaotic_Good",
             "Lawful_Neutral",
             "Chaotic_Neutral",
             "Lawful_Evil",
@@ -29,7 +29,7 @@ def test_class(_form, field):
     alignment = field.data
     if alignment not in (
            ["Monk",
-            "Paladin"
+            "Paladin",
             "Ranger",
             "Sorcerer"]):
         raise ValidationError("Class is not an accepted value.")        

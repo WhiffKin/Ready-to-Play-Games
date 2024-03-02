@@ -49,6 +49,24 @@ export const thunkGetCharacterById = (id) => async (dispatch) => {
     return data;
 }
 
+export const thunkPostCharacter = (char) => async (dispatch) => {
+    const formData = new FormData();
+    for (let key of Object.keys(char)) 
+        formData.append(key, char[key]);
+
+    const response = await fetch("/api/characters", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+        dispatch(addChar(data));
+        return data;
+    }
+    return data;
+}
+
 // Reducer
 const initialState = {};
 function characterReducer(state = initialState, action) {

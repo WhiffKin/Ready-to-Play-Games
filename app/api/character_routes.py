@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app.models import db, Character
 from app.forms import CharacterForm
 from flask_login import current_user, login_required
@@ -24,9 +24,9 @@ def single_char(id):
     char = Character.query.get(id)
     return char.to_dict_stats()
 
-@character_routes.route("/<int:id>", methods=["POST"])
+@character_routes.route("", methods=["POST"])
 @login_required
-def post_char(id):
+def post_char():
     '''
     Create a character using the CharacterForm and add it to the database.
     '''
@@ -37,26 +37,28 @@ def post_char(id):
     if form.validate_on_submit():
         # Post to AWS if file is provided
         url = ""
-        sprite_file = request.data["spriteFile"]
+        sprite_file = form.data["sprite"]
+        print("================================\n", sprite_file, form.data, "\n================================")
         if sprite_file:
-            sprite_file = s3.get_unique_filename(sprite_file.filename)
+            sprite_file.filename = s3.get_unique_filename(sprite_file.filename)
             upload = s3.upload_file_to_s3(sprite_file)
+            print(upload)
             url = upload['url']
 
         # Otherwise use a default class picture
-        match form.data["classType"]:
-            case "Monk":
-                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png"
-            case "Paladin":
-                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png"
-            case "Ranger":
-                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png"
-            case _:
-                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"
+        value = form.data["classType"]
+        if value == "Monk":
+            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png"
+        elif value == "Paladin":
+            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png"
+        elif value == "Ranger":
+            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png"
+        else:
+            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"
             
         char = Character(
             name=form.data["name"],
-            sprite=form.data["sprite"],
+            sprite=url,
             description=form.data["description"],
             strength=form.data["strength"],
             dexterity=form.data["dexterity"],
@@ -70,17 +72,20 @@ def post_char(id):
         # If a user submitted with more skill points than 
         # they should have for character creation, set skills
         # to a value of 7
-        if 40 > (char["strength"] 
-               + char["dexterity"] 
-               + char["wisdom"] 
-               + char["charisma"]):
-            char["strength"]  = 7
-            char["dexterity"] = 7
-            char["wisdom"]    = 7
-            char["charisma"]  = 7
+        if 40 > (char.strength 
+               + char.dexterity 
+               + char.wisdom 
+               + char.charisma):
+            char.strength  = 7
+            char.dexterity = 7
+            char.wisdom    = 7
+            char.charisma  = 7
+
+        char.user = current_user
         
         db.session.add(char)
         db.session.commit()
-        return { "message": f"Successfully created {char["name"]}!"}
 
-    return form.errors, 401
+        return char.to_dict(), 201
+
+    return { "errors": form.errors }, 400

@@ -1,39 +1,185 @@
-import { useState } from "react";
-import randName from "./names";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { chooseRandElem } from "../../../helperFuncs";
+import names from "./names";
+import { thunkPostCharacter } from "../../../redux/character";
+import SignupFormModal from "../../SignupFormModal";
+import { useModal } from "../../../context/Modal";
 
 function CreateCharacterPage() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { setModalContent } = useModal();
+    const user = useSelector(state => state.session.user);
+
+    const [custSprite, setCustSprite] = useState();
     const [sprite, setSprite] = useState("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png");    
     const [name, setName] = useState("");
-    const [alignment, setAlignment] = useState("");
-    const [charClass, setCharClass] = useState("");
+    const [alignment, setAlignment] = useState("Lawful_Neutral");
+    const [charClass, setCharClass] = useState("Monk");
+    const [description, setDescription] = useState("");
+    const [str, setStr] = useState(10);
+    const [dex, setDex] = useState(10);
+    const [wis, setWis] = useState(10);
+    const [cha, setCha] = useState(10);
     
     const [validation, setValidation] = useState({});
+    const [canSubmit, setCanSubmit] = useState(true);
 
-    const setRandName = e => {
-        e.preventDefault();
-        setName(randName());
-    }
-
-    const changeClass = e => {
-        e.preventDefault();
-        setCharClass(e.target.value);
-        switch(e.target.value) {
-            case "Monk":
-                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png");
-            case "Paladin":
-                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png");
-            case "Ranger":
-                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png");
-            case "Sorcerer":
-                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png");
+    // Set new Sprite
+    function onImageChange(e) {
+        if (e.target.files && e.target.files[0]) {
+            const url = URL.createObjectURL(e.target.files[0]);
+            setCustSprite(url);
+            setSprite(url)
         }
     }
+
+    // Set a random name from a list of names
+    const setRandName = e => {
+        e.preventDefault();
+        setName(chooseRandElem(names));
+    }
+
+    // Change class and sprite iff sprite is default
+    const changeClass = (e, value) => {
+        e.preventDefault();
+        setCharClass(value);
+        if (custSprite) return;
+        switch(value) {
+            case "Monk":
+                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png");
+                break;
+            case "Paladin":
+                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png");
+                break;
+            case "Ranger":
+                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png");
+                break;
+            case "Sorcerer":
+                setSprite("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png");
+                break;
+        }
+    }
+
+    // Increment stats iff the total is within 40 (base level stat points)
+    const incrementStats = (e, type) => {
+        const val = e.target.value;
+        if (val > 20 || val < 0) return;
+        
+        let total = str + dex + wis + cha;
+        switch(type) {
+            case "str":
+                total += val - str;
+                if (total <= 40) return setStr(parseInt(val));
+                break;
+            case "dex":
+                total += val - dex;
+                if (total <= 40) return setDex(parseInt(val));
+                break;
+            case "wis":
+                total += val - wis;
+                if (total <= 40) return setWis(parseInt(val));
+                break;
+            case "cha":
+                total += val - cha;
+                if (total <= 40) return setCha(parseInt(val));
+                break;
+        }
+        return setValidation({...validation, stats: "Stats are maxxed out"});
+    }
+
+    // Sets all fields to a random value
+    // TODO: implement gpt call for desc randomizing
+    const randomize = e => {
+        setRandName(e); // handles prevent default
+        setAlignment(chooseRandElem(
+           ["Lawful_Good",
+            "Chaotic_Good",
+            "Lawful_Neutral",
+            "Chaotic_Neutral",
+            "Lawful_Evil",
+            "Chaotic_Evil"]
+        ));
+        changeClass(e, chooseRandElem(
+           ["Monk",
+            "Paladin",
+            "Ranger",
+            "Sorcerer"]
+        ));
+
+        const newStats = [0,0,0,0];
+        for (let i = 0; i < 40; i++)
+            newStats[Math.floor(Math.random() * 4)]++;
+
+        setStr(newStats[0]);
+        setDex(newStats[1]);
+        setWis(newStats[2]);
+        setCha(newStats[3]);
+    }
+
+    // Form submission
+    const onSubmit = async e => {
+        e.preventDefault();
+        setCanSubmit(false);
+
+        // Validations
+        const newValid = {};
+        if (!name) newValid.name = "Name must have a value."
+        if (str + dex + wis + cha < 40) newValid.stats = "There are still remaining stat points."
+
+        // Unsuccessful validation
+        if (Object.values(newValid).length) {
+            setCanSubmit(true);
+            return setValidation(newValid);
+        }
+
+        const payload = {
+            name: `${user.username},${name}`,
+            alignment,
+            classType: charClass,
+            strength: str,
+            dexterity: dex,
+            wisdom: wis,
+            charisma: cha,
+            description,
+        } 
+        if (custSprite) payload.sprite = custSprite;
+        console.log(payload)
+
+        // Submission
+        const response = await dispatch(thunkPostCharacter(payload))
+
+        // Unsuccessful Submission
+        if (response.errors) { 
+            setValidation(response.errors);
+            setCanSubmit(true);
+            return;
+        }
+        console.log(response);
+
+        // Successful Submission
+        navigate(`/characters/${response.id}`);
+    }
+
+    useEffect(() => {
+        if (!user) setModalContent(<SignupFormModal />);
+        console.log(validation)
+    })
 
     return (
         <>
             <div> 
-                <img src={sprite} alt="Character sprite preview"/>
-                <form>
+                <label>
+                    <img src={sprite} alt="Character sprite preview"/>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={onImageChange}
+                    />
+                </label>
+                <form onSubmit={onSubmit}>
                     <h3>Character Details:</h3>
                     <label>
                         Name
@@ -59,20 +205,67 @@ function CreateCharacterPage() {
                             <option value="Lawful_Evil">Lawful Evil</option>
                             <option value="Chaotic_Evil">Chaotic Evil</option>
                         </select>
+                        <p>{validation.alignment && validation.alignment}</p>
                     </label>
                     <label>
                         Class
                         <select
                             type="select"
                             value={charClass}
-                            onChange={changeClass}
+                            onChange={e => changeClass(e, e.target.value)}
                         >
                             <option value="Monk" defaultValue>Monk</option>
                             <option value="Paladin">Paladin</option>
                             <option value="Ranger">Ranger</option>
                             <option value="Sorcerer">Sorcerer</option>
                         </select>
+                        <p>{validation.classType && validation.classType}</p>
                     </label>
+                    <label>
+                        Description
+                        <textarea
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                        ></textarea>
+                    </label>
+                    <h3>Character Stats:</h3>
+                    <label>
+                        Strength
+                        <input
+                            type="number"
+                            value={str}
+                            onChange={e => incrementStats(e, "str")}
+                        ></input>
+                    </label>
+                    <label>
+                        Dexterity
+                        <input
+                            type="number"
+                            value={dex}
+                            onChange={e => incrementStats(e, "dex")}
+                        ></input>
+                    </label>
+                    <label>
+                        Wisdom
+                        <input
+                            type="number"
+                            value={wis}
+                            onChange={e => incrementStats(e, "wis")}
+                        ></input>
+                    </label>
+                    <label>
+                        Charisma
+                        <input
+                            type="number"
+                            value={cha}
+                            onChange={e => incrementStats(e, "cha")}
+                        ></input>
+                    </label>
+                    <h5>Stat points left: {40 - str - wis - dex - cha}</h5>
+                    <div>
+                        <button onClick={randomize}>Randomize</button>
+                        <button type="submit" disabled={!canSubmit}>Submit</button>
+                    </div>
                 </form>
             </div>
         </>
