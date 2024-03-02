@@ -30,7 +30,7 @@ function CreateCharacterPage() {
     // Set new Sprite
     function onImageChange(e) {
         if (e.target.files && e.target.files[0]) {
-            const url = URL.createObjectURL(e.target.files[0]);
+            const url = e.target.files[0];
             setCustSprite(url);
             setSprite(url)
         }
@@ -179,7 +179,10 @@ function CreateCharacterPage() {
                         onChange={onImageChange}
                     />
                 </label>
-                <form onSubmit={onSubmit}>
+                <form 
+                    onSubmit={onSubmit}
+                    encType="multipart/form-data"
+                >
                     <h3>Character Details:</h3>
                     <label>
                         Name

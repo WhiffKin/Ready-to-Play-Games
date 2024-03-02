@@ -4,7 +4,7 @@ from sqlalchemy.sql import text
 
 # Adds a demo user, you can add other characters here if you want
 def seed_characters(all_users):
-    character = Character(name="Demo,Test Character", sprite="No Image", strength=10, dexterity=10, wisdom=10, charisma=10, experience=10, alignment="Lawful_Neutral", class_type="Monk", description="I am but a humble test character who will be removed from a production environment.", user=all_users[0])
+    character = Character(name="Demo,Test Character", sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png", strength=10, dexterity=10, wisdom=10, charisma=10, experience=10, alignment="Lawful_Neutral", class_type="Monk", description="I am but a humble test character who will be removed from a production environment.", user=all_users[0])
 
     db.session.add(character)
     db.session.commit()

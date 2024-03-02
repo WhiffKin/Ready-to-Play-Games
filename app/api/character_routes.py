@@ -35,27 +35,28 @@ def post_char():
     # form manually to validate_on_submit can be used
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        # Post to AWS if file is provided
-        url = ""
+        url = "No Image"
         sprite_file = form.data["sprite"]
         print("================================\n", sprite_file, form.data, "\n================================")
+        
+        # Post to AWS if file is provided
         if sprite_file:
             sprite_file.filename = s3.get_unique_filename(sprite_file.filename)
             upload = s3.upload_file_to_s3(sprite_file)
-            print(upload)
+            print(dir(sprite_file))
             url = upload['url']
+        else: 
+            # Otherwise use a default class picture
+            value = form.data["classType"]
+            if value == "Monk":
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png"
+            elif value == "Paladin":
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png"
+            elif value == "Ranger":
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png"
+            else:
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"
 
-        # Otherwise use a default class picture
-        value = form.data["classType"]
-        if value == "Monk":
-            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png"
-        elif value == "Paladin":
-            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png"
-        elif value == "Ranger":
-            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png"
-        else:
-            url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"
-            
         char = Character(
             name=form.data["name"],
             sprite=url,
@@ -89,3 +90,30 @@ def post_char():
         return char.to_dict(), 201
 
     return { "errors": form.errors }, 400
+
+@character_routes.route("/<int:id>", methods=["DELETE"])
+@login_required
+def delete_char(id):
+    '''
+    Delete a character from the database if you are the user that created them.
+    '''
+    char = Character.query.get(id)
+
+    # Check for authorization.
+    if char.user_id != current_user.id:
+        return { "message": "Authorization denied." }, 401    
+    
+    # Delete any custom sprites.
+    if char.sprite not in (
+       ["https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png",
+        "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png",
+        "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png",
+        "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"]):
+        deleted = s3.remove_file_from_s3(char.sprite)
+        if deleted != True:
+            return deleted
+
+    db.session.delete(char)
+    db.session.commit()
+    return { "message": "Successfully deleted." }, 200
+    

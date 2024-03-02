@@ -10,6 +10,8 @@ s3 = boto3.client(
 )
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+BUCKET_NAME = os.environ.get("S3_PICTUREUPLOADBUCKET")
+S3_LOCATION = f"http://{BUCKET_NAME}.s3.amazonaws.com/"
 
 def get_unique_filename(filename):
     ext = filename.rsplit(".", 1)[1].lower()
@@ -20,8 +22,6 @@ def picture_file(filename):
     return "." in filename and \
         filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-BUCKET_NAME = os.environ.get("S3_SONGUPLOADBUCKET")
-S3_LOCATION = f"http://{BUCKET_NAME}.s3.amazonaws.com/"
 
 def upload_file_to_s3(file, acl="public-read"):
     try:
@@ -36,6 +36,7 @@ def upload_file_to_s3(file, acl="public-read"):
         )
     except Exception as e:
         # in case the your s3 upload fails
+        print("ERRORS IN S3:", str(e))
         return {"errors": str(e)}
 
     return {"url": f"{S3_LOCATION}{file.filename}"}

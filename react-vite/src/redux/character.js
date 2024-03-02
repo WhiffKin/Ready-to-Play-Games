@@ -6,7 +6,7 @@ export const selectCharArray = () =>
         state => state.characters,
         chars => Object.values(chars)
     )
-export const selectIndividualChar = (id) => 
+export const selectIndividualChar = id => 
     createSelector(
         state => state.characters,
         chars => chars[id]
@@ -15,41 +15,40 @@ export const selectIndividualChar = (id) =>
 // Action Types
 const ADD_CHARS = "characters/ADD_CHARACTERS"
 const ADD_CHAR = "characters/ADD_CHARACTER"
+const DELETE_CHAR = "characters/DELETE_CHARACTER"
 
 // Action Creators
-const addChars = (chars) => ({
+const addChars = chars => ({
     type: ADD_CHARS,
     payload: chars
 })
-const addChar = (char) => ({
+const addChar = char => ({
     type: ADD_CHAR,
     payload: char
 })
+const deleteChar = id => ({
+    type: DELETE_CHAR,
+    payload: id
+})
 
 // Thunks
-export const thunkGetCharacters = () => async (dispatch) => {
+export const thunkGetCharacters = () => async dispatch => {
     const response = await fetch("/api/characters");
     
     const data = await response.json();
-    if (response.ok) {
-        const chars = await dispatch(addChars(data));
-        return chars;
-    }
+    if (response.ok) dispatch(addChars(data));
     return data;
 }
 
-export const thunkGetCharacterById = (id) => async (dispatch) => {
+export const thunkGetCharacterById = id => async dispatch => {
     const response = await fetch(`/api/characters/${id}`);
     
     const data = await response.json();
-    if (response.ok) {
-        const chars = await dispatch(addChar(data));
-        return chars;
-    }
+    if (response.ok) dispatch(addChar(data));
     return data;
 }
 
-export const thunkPostCharacter = (char) => async (dispatch) => {
+export const thunkPostCharacter = char => async dispatch => {
     const formData = new FormData();
     for (let key of Object.keys(char)) 
         formData.append(key, char[key]);
@@ -60,10 +59,17 @@ export const thunkPostCharacter = (char) => async (dispatch) => {
     });
 
     const data = await response.json();
-    if (response.ok) {
-        dispatch(addChar(data));
-        return data;
-    }
+    if (response.ok) dispatch(addChar(data));
+    return data;
+}
+
+export const thunkDeleteCharacter = id => async dispatch => {
+    const response = await fetch(`/api/characters/${id}`, {
+        method: "DELETE"
+    });
+
+    const data = await response.json();
+    if (response.ok) dispatch(deleteChar(id));
     return data;
 }
 
@@ -79,6 +85,9 @@ function characterReducer(state = initialState, action) {
             }, {})};
         case ADD_CHAR:
             newState[action.payload.id] = action.payload;
+            return newState;
+        case DELETE_CHAR:
+            delete newState[action.payload];
             return newState;
         default:
             return newState;

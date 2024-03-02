@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { selectIndividualChar, thunkGetCharacterById } from "../../../redux/character";
+import OpenModalButton from "../../OpenModalButton/OpenModalButton";
+import DeleteCharModal from "./DeleteCharacterModal";
 
 const SingleCharacterPage = () => {
     const { charId } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const char = useSelector(selectIndividualChar(charId));
     const user = useSelector(state => state.session.user);
 
@@ -37,11 +40,10 @@ const SingleCharacterPage = () => {
                         >
                             Edit
                         </button>
-                        <button 
-                            onClick={() => alert("Delete Character")}
-                        >
-                            Delete
-                        </button>
+                        <OpenModalButton
+                            buttonText="Delete"
+                            modalComponent={<DeleteCharModal charId={charId} navigate={navigate} />}
+                        />
                     </>}
                 </div>
             </div>

@@ -42,5 +42,5 @@ class CharacterForm(FlaskForm):
     dexterity = IntegerField("dexterity", validators=[DataRequired()])
     wisdom = IntegerField("wisdom", validators=[DataRequired()])
     charisma = IntegerField("charisma", validators=[DataRequired()])
-    sprite = FileField("sprite", validators=[FileAllowed(ALLOWED_EXTENSIONS)])
+    sprite = FileField("sprite", validators=[FileAllowed(list(ALLOWED_EXTENSIONS))])
     description = StringField("description", default="")
