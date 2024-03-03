@@ -3,35 +3,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { chooseRandElem } from "../../../helperFuncs";
 import names from "./names";
-import { thunkPostCharacter } from "../../../redux/character";
+import { thunkPostCharacter, thunkUpdateCharacter } from "../../../redux/character";
 import SignupFormModal from "../../SignupFormModal";
 import { useModal } from "../../../context/Modal";
 
-function CreateCharacterPage() {
+function CreateCharacterPage({ editedChar }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { setModalContent } = useModal();
     const user = useSelector(state => state.session.user);
 
     const [custSprite, setCustSprite] = useState();
-    const [sprite, setSprite] = useState("https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png");    
-    const [name, setName] = useState("");
-    const [alignment, setAlignment] = useState("Lawful_Neutral");
+    const [sprite, setSprite] = useState(editedChar ? editedChar.sprite : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png");    
+    const [name, setName] = useState(editedChar ? editedChar.name : "");
+    const [alignment, setAlignment] = useState(editedChar ? editedChar.alignment : "Lawful_Neutral");
     const [charClass, setCharClass] = useState("Monk");
-    const [description, setDescription] = useState("");
-    const [str, setStr] = useState(10);
-    const [dex, setDex] = useState(10);
-    const [wis, setWis] = useState(10);
-    const [cha, setCha] = useState(10);
+    const [description, setDescription] = useState(editedChar ? editedChar.description : "");
+    const [str, setStr] = useState(editedChar ? editedChar.strength : 10);
+    const [dex, setDex] = useState(editedChar ? editedChar.dexterity : 10);
+    const [wis, setWis] = useState(editedChar ? editedChar.wisdom : 10);
+    const [cha, setCha] = useState(editedChar ? editedChar.charisma : 10);
     
     const [validation, setValidation] = useState({});
     const [canSubmit, setCanSubmit] = useState(true);
 
+    useEffect(() => {
+        if (editedChar) {
+            setCharClass(editedChar.classType);
+            if (!["https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png",
+                  "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png",
+                  "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png",
+                  "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"]
+                  .includes(editedChar.sprite)) setCustSprite(true);
+        }
+    }, [])
+
     // Set new Sprite
     function onImageChange(e) {
         if (e.target.files && e.target.files[0]) {
-            const url = e.target.files[0];
-            setCustSprite(url);
+            const url = URL.createObjectURL(e.target.files[0]);
+            setCustSprite(e.target.files[0]);
             setSprite(url)
         }
     }
@@ -68,23 +79,25 @@ function CreateCharacterPage() {
         const val = e.target.value;
         if (val > 20 || val < 0) return;
         
+        let max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
+        console.log(max)
         let total = str + dex + wis + cha;
         switch(type) {
             case "str":
                 total += val - str;
-                if (total <= 40) return setStr(parseInt(val));
+                if (total <= max) return setStr(parseInt(val));
                 break;
             case "dex":
                 total += val - dex;
-                if (total <= 40) return setDex(parseInt(val));
+                if (total <= max) return setDex(parseInt(val));
                 break;
             case "wis":
                 total += val - wis;
-                if (total <= 40) return setWis(parseInt(val));
+                if (total <= max) return setWis(parseInt(val));
                 break;
             case "cha":
                 total += val - cha;
-                if (total <= 40) return setCha(parseInt(val));
+                if (total <= max) return setCha(parseInt(val));
                 break;
         }
         return setValidation({...validation, stats: "Stats are maxxed out"});
@@ -145,11 +158,12 @@ function CreateCharacterPage() {
             charisma: cha,
             description,
         } 
-        if (custSprite) payload.sprite = custSprite;
-        console.log(payload)
+        if (custSprite && custSprite !== true) payload.sprite = custSprite;
+        if (editedChar) payload.id = editedChar.id;
+        console.log(payload, editedChar)
 
         // Submission
-        const response = await dispatch(thunkPostCharacter(payload))
+        const response = await dispatch(editedChar ? thunkUpdateCharacter(payload) : thunkPostCharacter(payload))
 
         // Unsuccessful Submission
         if (response.errors) { 
@@ -264,7 +278,7 @@ function CreateCharacterPage() {
                             onChange={e => incrementStats(e, "cha")}
                         ></input>
                     </label>
-                    <h5>Stat points left: {40 - str - wis - dex - cha}</h5>
+                    <h5>Stat points left: {40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0) - str - wis - dex - cha}</h5>
                     <div>
                         <button onClick={randomize}>Randomize</button>
                         <button type="submit" disabled={!canSubmit}>Submit</button>

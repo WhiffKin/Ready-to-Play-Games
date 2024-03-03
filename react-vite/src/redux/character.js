@@ -63,6 +63,22 @@ export const thunkPostCharacter = char => async dispatch => {
     return data;
 }
 
+export const thunkUpdateCharacter = char => async dispatch => {
+    const charId = char.id;
+    const formData = new FormData();
+    for (let key of Object.keys(char)) 
+        formData.append(key, char[key]);
+
+    const response = await fetch(`/api/characters/${charId}`, {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+    if (response.ok) dispatch(addChar(data));
+    return data;
+}
+
 export const thunkDeleteCharacter = id => async dispatch => {
     const response = await fetch(`/api/characters/${id}`, {
         method: "DELETE"

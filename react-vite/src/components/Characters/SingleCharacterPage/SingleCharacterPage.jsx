@@ -16,7 +16,7 @@ const SingleCharacterPage = () => {
         dispatch(thunkGetCharacterById(charId));
     }, [])
 
-    if (!char && !char?.strength) return <h1>Loading char...</h1>
+    if (!char && !char?.strength) return <h1>Loading Character Details...</h1>;
     return (
         <>
             <div>
@@ -36,7 +36,7 @@ const SingleCharacterPage = () => {
                     {user && user.id == char.userId &&
                     <>
                         <button 
-                            onClick={() => alert("Edit Character")}
+                            onClick={() => navigate(`/characters/${charId}/update`)}
                         >
                             Edit
                         </button>
@@ -56,7 +56,7 @@ const SingleCharacterPage = () => {
             <p>Charisma: {char.charisma}</p>
             <p>Experience: {char.experience}</p>
         </>
-    )
+    );
 }
 
 export default SingleCharacterPage;

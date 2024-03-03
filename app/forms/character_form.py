@@ -43,4 +43,15 @@ class CharacterForm(FlaskForm):
     wisdom = IntegerField("wisdom", validators=[DataRequired()])
     charisma = IntegerField("charisma", validators=[DataRequired()])
     sprite = FileField("sprite", validators=[FileAllowed(list(ALLOWED_EXTENSIONS))])
+    description = StringField("description", default="")     
+
+class UpdateCharacterForm(FlaskForm):
+    name = StringField("name", validators=[DataRequired()])
+    alignment = StringField("alignment", validators=[DataRequired(), test_alignment])
+    classType = StringField("classType", validators=[DataRequired(), test_class])
+    strength = IntegerField("strength", validators=[DataRequired()])
+    dexterity = IntegerField("dexterity", validators=[DataRequired()])
+    wisdom = IntegerField("wisdom", validators=[DataRequired()])
+    charisma = IntegerField("charisma", validators=[DataRequired()])
+    sprite = FileField("sprite", validators=[FileAllowed(list(ALLOWED_EXTENSIONS))])
     description = StringField("description", default="")
