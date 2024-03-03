@@ -17,7 +17,7 @@ const SingleUserPage = () => {
     return (
         <>
             <div>
-                <img src={user.profilePic} alt={`${user.username}&apos;s profile picture.`} />
+                <img src={user.profilePic} alt={`${user.username}'s profile picture.`} />
                 <div>
                     <h1>{user.username}</h1>
                     <h3>{user.firstName} {user.lastName}</h3>

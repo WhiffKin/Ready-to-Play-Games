@@ -18,8 +18,8 @@ const UsersPage = () => {
             {users.map(user => (
                 <div key={user.id} onClick={() => navigate(`/users/${user.id}`)}>
                     <img src={user.profile_pic} alt={`${user.username} profile picture.`} />
-                    <span>{user.username}</span>
-                    <span>{user.email}</span>
+                    <p>{user.username}</p>
+                    <p>{user.email}</p>
                 </div>
             ))}
         </>
