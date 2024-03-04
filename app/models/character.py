@@ -23,7 +23,7 @@ class Character(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
-    name = db.Column(db.String(80), nullable=False, unique=True)
+    name = db.Column(db.String(81), nullable=False, unique=True)
     sprite = db.Column(db.String(), nullable=False)
     strength = db.Column(db.Integer, nullable=False)
     dexterity = db.Column(db.Integer, nullable=False)

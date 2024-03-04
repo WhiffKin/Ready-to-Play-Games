@@ -12,7 +12,7 @@ class CampaignTemplate(db.Model):
 
     # Relationships:
     ## One to Many: 
-    env_pieces = db.relationship(
+    rooms = db.relationship(
         "EnvironmentPieces",
         back_populates="room",
     )
@@ -21,8 +21,17 @@ class CampaignTemplate(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'background_sprite': self.background_sprite,
+            'backgroundSprite': self.background_sprite,
             'name': self.name,
-            'pieces': [piece.to_dict() for piece in self.env_pieces],
+            'numRooms': len(self.rooms),
         }
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'backgroundSprite': self.background_sprite,
+            'name': self.name,
+            'numRooms': len(self.rooms),
+        }
+    
     

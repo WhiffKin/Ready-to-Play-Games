@@ -9,6 +9,7 @@ class Location(Enum):
     back_center = "back_left"
     back_right = "back_left"
     obstacle = "obstacle"
+    wall = "wall"
 
 class EnvironmentPieces(db.Model):
     __tablename__ = 'environment_pieces'
