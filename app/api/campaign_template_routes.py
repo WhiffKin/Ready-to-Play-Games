@@ -37,7 +37,11 @@ def post_char():
     # form manually to validate_on_submit can be used
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        url = "No Image"
+        print("---------------------")
+        print(form)
+        print("---------------------")
+        print(form.data)
+        print("---------------------")
 
         return {"message": "Being implemented."}, 201
 
