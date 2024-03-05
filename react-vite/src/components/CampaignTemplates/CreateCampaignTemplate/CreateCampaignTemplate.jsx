@@ -7,9 +7,13 @@ function CreateCampaignTemplate() {
     const [name, setName] = useState("");
     const [backgroundSprite, setBackgroundSprite] = useState();
 
-    function setEnvironPiece(e, location) {
+    const [showPrevState, setShowPrevState] = useState(false);
+    const [prevState, setPrevState] = useState({});
+    const [canSubmit, setCanSubmit] = useState(true);
+
+    function setEnvironPieceFunc(e, location) {
         if (e.target.files && e.target.files[0])
-            setEnvironPiece({
+            setEnvironPieces({
                 ...environPieces,
                 [location]: {
                     file: e.target.files[0],
@@ -18,14 +22,30 @@ function CreateCampaignTemplate() {
             });
     }
 
-    function onSubmit(e) {
-        e.preventDefault();
+    function setBackgroundSpriteFunc(e) {
+        if (e.target.files && e.target.files[0])
+            setBackgroundSprite({
+                file: e.target.files[0],
+                url: URL.createObjectURL(e.target.files[0]),   
+            })
+    }
 
+    function onSubmit(e) {
+        e.preventDefault(); 
     }
 
     return (
         <>
             <div>
+                {!backgroundSprite ? 
+                <label>
+                    Choose a background for this room.
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={setBackgroundSpriteFunc}
+                    />
+                </label> : 
                 <form onSubmit={onSubmit}>
                     <label>
                         Name
@@ -42,7 +62,7 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "wall")}
+                            onChange={e => setEnvironPieceFunc(e, "wall")}
                         />
                     </label>
                     <label>
@@ -52,7 +72,7 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "back_left")}
+                            onChange={e => setEnvironPieceFunc(e, "back_left")}
                         />
                     </label>
                     <label>
@@ -62,7 +82,7 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "back_center")}
+                            onChange={e => setEnvironPieceFunc(e, "back_center")}
                         />
                     </label>
                     <label>
@@ -72,7 +92,7 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "back_right")}
+                            onChange={e => setEnvironPieceFunc(e, "back_right")}
                         />
                     </label>
                     <label>
@@ -82,7 +102,7 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "obstacle")}
+                            onChange={e => setEnvironPieceFunc(e, "obstacle")}
                         />
                     </label>
                     <label>
@@ -92,7 +112,7 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "front_left")}
+                            onChange={e => setEnvironPieceFunc(e, "front_left")}
                         />
                     </label>
                     <label>
@@ -102,7 +122,7 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "front_center")}
+                            onChange={e => setEnvironPieceFunc(e, "front_center")}
                         />
                     </label>
                     <label>
@@ -112,10 +132,12 @@ function CreateCampaignTemplate() {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={e => setEnvironPiece(e, "front_right")}
+                            onChange={e => setEnvironPieceFunc(e, "front_right")}
                         />
                     </label>
+                    <button type="submit" disabled={!canSubmit}>Submit</button>
                 </form>
+                }
             </div>
         </>
     )

@@ -1,4 +1,4 @@
-from app.models import db, CampaignTemplate, Room, EnvironmentPieces, environment, SCHEMA
+from app.models import db, CampaignTemplate, Room, EnvironmentPiece, environment, SCHEMA
 from sqlalchemy.sql import text
 
 
@@ -11,9 +11,9 @@ def seed_templates(all_users):
     room3 = Room(template=template, name="A Special Boss??", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
     rooms = [room1, room2, room3]
 
-    piece1 = EnvironmentPieces(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_left")
-    piece2 = EnvironmentPieces(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_right")
-    piece3 = EnvironmentPieces(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Short+Grass.png", location="front_center")
+    piece1 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_left")
+    piece2 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_right")
+    piece3 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Short+Grass.png", location="front_center")
     env_pieces = [piece1, piece2, piece3]
     
     db.session.add(template)

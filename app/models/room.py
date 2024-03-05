@@ -27,8 +27,8 @@ class Room(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'background_sprite': self.background_sprite,
             'name': self.name,
+            'background_sprite': self.background_sprite,
             'pieces': [piece.to_dict() for piece in self.env_pieces],
         }
     

@@ -11,7 +11,7 @@ class Location(Enum):
     obstacle = "obstacle"
     wall = "wall"
 
-class EnvironmentPieces(db.Model):
+class EnvironmentPiece(db.Model):
     __tablename__ = 'environment_pieces'
 
     if environment == "production":
