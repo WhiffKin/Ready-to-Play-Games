@@ -34,5 +34,5 @@ class EnvironmentPieces(db.Model):
         return {
             'id': self.id,
             'sprite': self.sprite,
-            'location': self.location,
+            'location': self.location.name,
         }

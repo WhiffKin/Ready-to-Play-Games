@@ -1,5 +1,6 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from enum import Enum
+from math import floor
 
 class Class(Enum):
     Monk="Monk"
@@ -54,12 +55,21 @@ class Character(db.Model):
         }
     
     def to_dict_stats(self): 
+        health = 4 + floor(self.experience / 10)
+        if self.class_type == 'Paladin':
+            health *= 1.4
+            health = floor(health)
+        elif self.class_type == 'Sorecerer':
+            health *= .6
+            health = floor(health)
+
         return {
             'id': self.id,
             'userId': self.user_id,
             'name': self.name.rsplit(",")[1],
             'sprite': self.sprite,
             'description': self.description,
+            'health': health,
             'strength': self.strength,
             'dexterity': self.dexterity,
             'wisdom': self.wisdom,

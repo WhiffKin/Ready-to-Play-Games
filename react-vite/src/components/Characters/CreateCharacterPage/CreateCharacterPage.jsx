@@ -38,6 +38,10 @@ function CreateCharacterPage({ editedChar }) {
         }
     }, [])
 
+    useEffect(() => {
+        if (!user) setModalContent(<SignupFormModal />);
+    })
+
     // Set new Sprite
     function onImageChange(e) {
         if (e.target.files && e.target.files[0]) {
@@ -80,7 +84,6 @@ function CreateCharacterPage({ editedChar }) {
         if (val > 20 || val < 0) return;
         
         let max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
-        console.log(max)
         let total = str + dex + wis + cha;
         switch(type) {
             case "str":
@@ -139,7 +142,7 @@ function CreateCharacterPage({ editedChar }) {
 
         // Validations
         const newValid = {};
-        if (!name) newValid.name = "Name must have a value."
+        if (name.length < 2) newValid.name = "Name must have a minimum length of 2."
         if (str + dex + wis + cha < 40) newValid.stats = "There are still remaining stat points."
 
         // Unsuccessful validation
@@ -160,7 +163,6 @@ function CreateCharacterPage({ editedChar }) {
         } 
         if (custSprite && custSprite !== true) payload.sprite = custSprite;
         if (editedChar) payload.id = editedChar.id;
-        console.log(payload, editedChar)
 
         // Submission
         const response = await dispatch(editedChar ? thunkUpdateCharacter(payload) : thunkPostCharacter(payload))
@@ -171,16 +173,10 @@ function CreateCharacterPage({ editedChar }) {
             setCanSubmit(true);
             return;
         }
-        console.log(response);
 
         // Successful Submission
         navigate(`/characters/${response.id}`);
     }
-
-    useEffect(() => {
-        if (!user) setModalContent(<SignupFormModal />);
-        console.log(validation)
-    })
 
     return (
         <>

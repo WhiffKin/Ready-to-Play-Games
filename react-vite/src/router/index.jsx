@@ -8,6 +8,8 @@ import CharactersPage from '../components/Characters/CharactersPage';
 import SingleCharacterPage from '../components/Characters/SingleCharacterPage';
 import CreateCharacterPage from '../components/Characters/CreateCharacterPage';
 import UpdateCharacterPage from '../components/Characters/UpdateCharacterPage';
+import SingleCampaignTemplatePage from '../components/CampaignTemplates/SingleCampaignTemplatePage/SingleCampaignTemplatePage';
+import CampaignTemplatesPage from '../components/CampaignTemplates/CampaignTemplatesPage/CampaignTemplatesPage';
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ export const router = createBrowserRouter([
       {
         path: "characters/new",
         element: <CreateCharacterPage />
+      },
+      {
+        path: "templates",
+        element: <CampaignTemplatesPage />
+      },
+      {
+        path: "templates/:tempId",
+        element: <SingleCampaignTemplatePage />
       },
     ],
   },

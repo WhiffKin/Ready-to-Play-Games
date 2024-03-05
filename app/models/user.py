@@ -24,10 +24,14 @@ class User(db.Model, UserMixin):
     # fave_campaigns
 
     ## One to Many:
+    templates = db.relationship(
+        "CampaignTemplate",
+        back_populates="user",
+    )
     characters = db.relationship(
         "Character",
         back_populates="user",
-        cascade="all, delete"
+        cascade="all, delete",
     )
 
     # To Dictionary Methods:

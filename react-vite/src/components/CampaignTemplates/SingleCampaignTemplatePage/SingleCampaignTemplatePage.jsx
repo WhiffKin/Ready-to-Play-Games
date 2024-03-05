@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { selectIndividualTemplate, thunkGetTemplateById } from "../../../redux/campaignTemplates";
 
 const SingleCampaignTemplatePage = () => {
     const { tempId } = useParams();
     const dispatch = useDispatch();
-    const temp = useSelector(selectIndividualTemp(tempId));
+    const temp = useSelector(selectIndividualTemplate(tempId));
     const user = useSelector(state => state.session.user);
 
     useEffect(() => {
@@ -18,7 +19,7 @@ const SingleCampaignTemplatePage = () => {
             <div>
                 <img src={temp.sprite} alt={`${temp.name}'s sprite.`} />
                 <div>
-                    <h1>{char.name}</h1>
+                    <h1>{temp.name}</h1>
                 </div>
                 <div>
                     <button 

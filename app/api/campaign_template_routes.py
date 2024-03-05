@@ -9,7 +9,7 @@ from math import floor
 campaign_template_routes = Blueprint('templates', __name__)
 
 @campaign_template_routes.route("")
-def all_chars():
+def all_temps():
     '''
     Get all campaign templates that are submitted to the db.
     TODO: Implement pagination
@@ -19,12 +19,12 @@ def all_chars():
     return { "templates": [template.to_dict() for template in templates] }
 
 @campaign_template_routes.route("/<int:id>")
-def single_char(id):
+def single_temp(id):
     '''
     Get the stats for a single campaign template.
     '''
     template = CampaignTemplate.query.get(id)
-    return template.to_dict_stats()
+    return template.to_dict_detailed()
 
 @campaign_template_routes.route("", methods=["POST"])
 @login_required

@@ -1,8 +1,8 @@
-"""added campaign template tables
+"""create campaign template tables
 
-Revision ID: 8f1b1e99891b
+Revision ID: 3ba2fd006fce
 Revises: 0318616ab5dc
-Create Date: 2024-03-03 22:21:48.933835
+Create Date: 2024-03-04 22:39:58.007209
 
 """
 from alembic import op
@@ -14,7 +14,7 @@ SCHEMA = os.environ.get("SCHEMA")
 
 
 # revision identifiers, used by Alembic.
-revision = '8f1b1e99891b'
+revision = '3ba2fd006fce'
 down_revision = '0318616ab5dc'
 branch_labels = None
 depends_on = None
@@ -25,8 +25,12 @@ def upgrade():
     op.create_table('campaign_templates',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('map', sa.String(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.PrimaryKeyConstraint('id', 'user_id')
+    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('recommended_level', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('background_sprite', sa.String(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('rooms',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -40,7 +44,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('room_id', sa.Integer(), nullable=False),
     sa.Column('sprite', sa.String(), nullable=False),
-    sa.Column('location', sa.Enum('front_left', 'front_center', 'front_right', 'back_left', 'back_center', 'back_right', 'obstacle', name='location'), nullable=False),
+    sa.Column('location', sa.Enum('front_left', 'front_center', 'front_right', 'back_left', 'back_center', 'back_right', 'obstacle', 'wall', name='location'), nullable=False),
     sa.ForeignKeyConstraint(['room_id'], ['rooms.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

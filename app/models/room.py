@@ -13,9 +13,14 @@ class Room(db.Model):
 
     # Relationships:
     ## One to Many: 
+    template = db.relationship(
+        "CampaignTemplate",
+        back_populates="rooms"
+    )
     env_pieces = db.relationship(
         "EnvironmentPieces",
         back_populates="room",
+        cascade="all, delete",
     )
 
     # To Dictionary Methods:
