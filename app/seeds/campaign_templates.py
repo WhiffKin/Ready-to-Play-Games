@@ -6,9 +6,9 @@ from sqlalchemy.sql import text
 def seed_templates(all_users):
     template = CampaignTemplate(map="1;s:13-d:8,2;e:1,3;e:2", name="A Great Test!", recommended_level=0, background_sprite="No Image", user=all_users[0])
 
-    room1 = Room(template=template, name="Grass Field", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Grass.png")
-    room2 = Room(template=template, name="Dungeon Entrance", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
-    room3 = Room(template=template, name="A Special Boss??", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
+    room1 = Room(user=all_users[0], name="Grass Field", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Grass.png")
+    room2 = Room(user=all_users[0], name="Dungeon Entrance", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
+    room3 = Room(user=all_users[0], name="A Special Boss??", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
     rooms = [room1, room2, room3]
 
     piece1 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_left")

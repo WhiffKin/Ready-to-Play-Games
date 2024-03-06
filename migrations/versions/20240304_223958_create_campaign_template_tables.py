@@ -34,10 +34,10 @@ def upgrade():
     )
     op.create_table('rooms',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('template_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('background_sprite', sa.String(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.ForeignKeyConstraint(['template_id'], ['campaign_templates.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('environment_pieces',

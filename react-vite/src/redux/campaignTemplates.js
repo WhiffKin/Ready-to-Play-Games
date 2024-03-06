@@ -58,6 +58,20 @@ export const thunkPostTemplate = temp => async dispatch => {
     return data;
 }
 
+export const thunkPostRoom = room => async dispatch => {
+    const formData = new FormData();
+    for (let key of Object.keys(temp)) 
+        formData.append(key, temp[key]);
+
+    const response = await fetch("/api/templates/room", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+    return data;
+}
+
 // Reducer
 const initialState = {};
 function campaignTempReducer(state = initialState, action) {

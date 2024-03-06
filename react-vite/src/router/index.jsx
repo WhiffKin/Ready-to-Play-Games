@@ -10,6 +10,8 @@ import CreateCharacterPage from '../components/Characters/CreateCharacterPage';
 import UpdateCharacterPage from '../components/Characters/UpdateCharacterPage';
 import SingleCampaignTemplatePage from '../components/CampaignTemplates/SingleCampaignTemplatePage/SingleCampaignTemplatePage';
 import CampaignTemplatesPage from '../components/CampaignTemplates/CampaignTemplatesPage/CampaignTemplatesPage';
+import { CampaignTemplateProvider } from '../context/CampaignTemplate/CampaignTemplate';
+import CreateCampaignTemplate from '../components/CampaignTemplates/CreateCampaignTemplate/CreateCampaignTemplate';
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +60,13 @@ export const router = createBrowserRouter([
       {
         path: "templates/:tempId",
         element: <SingleCampaignTemplatePage />
+      },
+      {
+        path: "templates/new",
+        element:
+        <CampaignTemplateProvider>
+          <CreateCampaignTemplate />
+        </CampaignTemplateProvider> 
       },
     ],
   },

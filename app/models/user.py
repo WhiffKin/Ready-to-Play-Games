@@ -28,6 +28,10 @@ class User(db.Model, UserMixin):
         "CampaignTemplate",
         back_populates="user",
     )
+    rooms = db.relationship(
+        "Room",
+        back_populates="user",
+    )
     characters = db.relationship(
         "Character",
         back_populates="user",
