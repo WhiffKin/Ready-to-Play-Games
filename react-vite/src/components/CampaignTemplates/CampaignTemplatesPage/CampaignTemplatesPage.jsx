@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectTemplateArray, thunkGetTemplates } from "../../../redux/campaignTemplates";
+import { selectTemplateArray, thunkGetTemplates } from "../../../redux/campaignTemplate";
 
 function CampaignTemplatesPage() {
     const dispatch = useDispatch();

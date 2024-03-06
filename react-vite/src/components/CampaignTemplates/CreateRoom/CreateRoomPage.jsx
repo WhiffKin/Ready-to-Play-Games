@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { thunkPostRoom } from "../../../redux/room";
+import { useCampaignTemplateContext } from "../../../context/CampaignTemplate/CampaignTemplate";
 
 function CreateRoomPage() {
     const dispatch = useDispatch();
+    
+    const { setReset } = useCampaignTemplateContext();
     
     const [validation, setValidation] = useState({});
     const [environPieces, setEnvironPieces] = useState({});
@@ -17,7 +21,7 @@ function CreateRoomPage() {
                 ...environPieces,
                 [location]: {
                     file: e.target.files[0],
-                    url: URL.createObjectURL(e.target.file[0]),
+                    url: URL.createObjectURL(e.target.files[0]),
                 }
             });
     }
@@ -43,23 +47,47 @@ function CreateRoomPage() {
         setShowRoom(true);
     }
 
-    function onSubmit(e) {
+    function clearRoomFields() {
+        setValidation({})
+        setEnvironPieces({})
+        setName("")
+        setBackgroundSprite()
+        setShowRoom(false)
+        setCanSubmit(true)
+    }
+
+    const onSubmit = async e => {
         e.preventDefault();
 
         // Validation
         const newValid = {};
-        if (Object.values(skillChecks).find(el => el == "Working on it.")) newValid.skillChecks = "All skill checks need to be finished before submission.";
+        if (!name.length) newValid.name = "Name is required.";
+        if (!backgroundSprite) newValid.backgroundSprite = "Background Sprite is required.";
 
         // Unsuccessful validation.
         if (Object.values(newValid).length) return setValidation(newValid);
 
         const payload = {
-            ...environPieces,
             name,
-            backgroundSprite,
+            background_sprite: backgroundSprite.file,
+        }
+        console.log(environPieces)
+        for (let key in environPieces){console.log(key);
+            payload[key] = environPieces[key].file;}
+
+        // Submission
+        const response = await dispatch(thunkPostRoom(payload));
+
+        // Unsuccessful Submission
+        if (response.errors) { 
+            setValidation(response.errors);
+            setCanSubmit(true);
+            return;
         }
 
-        dispatch
+        // Successful Submission
+        clearRoomFields();
+        setReset(true);
     }
 
     return (
@@ -74,6 +102,7 @@ function CreateRoomPage() {
                             value={name}
                             onChange={e => setName(e.target.value)}
                         />
+                        <p>{validation.name && validation.name}</p>
                     </label>
                     <label>
                         Choose a background for this room.

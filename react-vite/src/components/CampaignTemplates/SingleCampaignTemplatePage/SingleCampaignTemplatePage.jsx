@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { selectIndividualTemplate, thunkGetTemplateById } from "../../../redux/campaignTemplates";
+import { selectIndividualTemplate, thunkGetTemplateById } from "../../../redux/campaignTemplate";
 
 const SingleCampaignTemplatePage = () => {
     const { tempId } = useParams();

@@ -6,9 +6,9 @@ from sqlalchemy.sql import text
 def seed_templates(all_users):
     template = CampaignTemplate(map="1;s:13-d:8,2;e:1,3;e:2", name="A Great Test!", recommended_level=0, background_sprite="No Image", user=all_users[0])
 
-    room1 = Room(user=all_users[0], name="Grass Field", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Grass.png")
-    room2 = Room(user=all_users[0], name="Dungeon Entrance", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
-    room3 = Room(user=all_users[0], name="A Special Boss??", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
+    room1 = Room(user=all_users[0], templates=[template], name="Grass Field", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Grass.png")
+    room2 = Room(user=all_users[0], templates=[template], name="Dungeon Entrance", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
+    room3 = Room(user=all_users[0], templates=[template], name="A Special Boss??", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
     rooms = [room1, room2, room3]
 
     piece1 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_left")
@@ -32,10 +32,12 @@ def undo_templates():
     if environment == "production":
         db.session.execute(f"TRUNCATE table {SCHEMA}.campaign_templates RESTART IDENTITY CASCADE;")
         db.session.execute(f"TRUNCATE table {SCHEMA}.rooms RESTART IDENTITY CASCADE;")
+        db.session.execute(f"TRUNCATE table {SCHEMA}.template_rooms RESTART IDENTITY CASCADE;")
         db.session.execute(f"TRUNCATE table {SCHEMA}.environment_pieces RESTART IDENTITY CASCADE;")
     else:
         db.session.execute(text("DELETE FROM campaign_templates"))
         db.session.execute(text("DELETE FROM rooms"))
+        db.session.execute(text("DELETE FROM template_rooms"))
         db.session.execute(text("DELETE FROM environment_pieces"))
         
     db.session.commit()

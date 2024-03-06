@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CreateRoomPage from "../CreateRoom";
 import CreateTemplatePage from "../CreateTemplatePage";
+import { useCampaignTemplateContext } from "../../../context/CampaignTemplate/CampaignTemplate";
 
 function CreateCampaignTemplate() {
-    const [allRooms, setAllRooms] = useState([]);
-    const [currentBuild, setCurrentBuild] = useState("")
+    const { reset, setReset } = useCampaignTemplateContext();
+    const [currentBuild, setCurrentBuild] = useState("");
 
     function onSubmit(e) {
         e.preventDefault(); 
     }
+
+    useEffect(() => {
+        if (reset){
+            setCurrentBuild("");
+            setReset(false);
+        }
+    }, [reset, setReset, setCurrentBuild]);
 
     return (
         <div

@@ -12,8 +12,9 @@ class CampaignTemplate(db.Model):
     #   first is the id of the room
     #   for stat challenges use their first letter : roll, ex: 's:8' (strength)
     #   for enemies use 'e' : their character id, ex: 'e:2'
-    #   for items rewards add : item id, ex 'e:2:1'
-    #   seperate challenges with '-', ex 's:8-e:2:1'
+    #   for items rewards add : item id, ex: 'e:2:1'
+    #   seperate challenges with '-', ex: 's:8-e:2:1'
+    # full map ex: 1;s:13-d:8,2;e:1,3;e:2
     map = db.Column(db.String(), nullable=False)
     name = db.Column(db.String(), nullable=False)
     recommended_level = db.Column(db.Integer, default=0)
@@ -21,15 +22,17 @@ class CampaignTemplate(db.Model):
     background_sprite = db.Column(db.String(), nullable=False)
 
     # Relationships:
+    ## Many to Many: 
+    rooms = db.relationship(
+        "Room",
+        secondary="template_rooms",
+        back_populates="templates",
+    )
+
     ## One to Many: 
     user = db.relationship(
         "User",
         back_populates="templates",
-    )
-    rooms = db.relationship(
-        "Room",
-        back_populates="template",
-        cascade="all, delete",
     )
 
     # To Dictionary Methods:

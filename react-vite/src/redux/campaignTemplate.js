@@ -4,17 +4,17 @@ import { createSelector } from "reselect";
 export const selectTemplateArray = () => 
     createSelector(
         state => state.campaignTemps,
-        chars => Object.values(chars)
+        temps => Object.values(temps)
     )
 export const selectIndividualTemplate = id => 
     createSelector(
         state => state.campaignTemps,
-        chars => chars[id]
+        temps => temps[id]
     )
 
 // Action Types
-const ADD_TEMPS = "characters/ADD_TEMPLATES"
-const ADD_TEMP = "characters/ADD_TEMPLATE"
+const ADD_TEMPS = "templates/ADD_TEMPLATES"
+const ADD_TEMP = "templates/ADD_TEMPLATE"
 
 // Action Creators
 const addTemps = temps => ({
@@ -54,21 +54,7 @@ export const thunkPostTemplate = temp => async dispatch => {
     });
 
     const data = await response.json();
-    if (response.ok) dispatch(addChar(data));
-    return data;
-}
-
-export const thunkPostRoom = room => async dispatch => {
-    const formData = new FormData();
-    for (let key of Object.keys(temp)) 
-        formData.append(key, temp[key]);
-
-    const response = await fetch("/api/templates/room", {
-        method: "POST",
-        body: formData
-    });
-
-    const data = await response.json();
+    if (response.ok) dispatch(addTemp(data));
     return data;
 }
 

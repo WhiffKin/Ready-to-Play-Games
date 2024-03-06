@@ -12,13 +12,20 @@ class Room(db.Model):
     name = db.Column(db.String(), nullable=False)
 
     # Relationships:
+    ## Many to Many
+    templates = db.relationship(
+        "CampaignTemplate",
+        secondary="template_rooms",
+        back_populates="rooms",
+    )
+
     ## One to Many: 
     user = db.relationship(
         "User",
-        back_populates="rooms"
+        back_populates="rooms",
     )
     env_pieces = db.relationship(
-        "EnvironmentPieces",
+        "EnvironmentPiece",
         back_populates="room",
     )
 
