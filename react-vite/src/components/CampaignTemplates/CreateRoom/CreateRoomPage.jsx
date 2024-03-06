@@ -71,9 +71,8 @@ function CreateRoomPage() {
             name,
             background_sprite: backgroundSprite.file,
         }
-        console.log(environPieces)
-        for (let key in environPieces){console.log(key);
-            payload[key] = environPieces[key].file;}
+        for (let key in environPieces)
+            payload[key] = environPieces[key].file;
 
         // Submission
         const response = await dispatch(thunkPostRoom(payload));
@@ -200,7 +199,10 @@ function CreateRoomPage() {
                         onChange={e => setEnvironPieceFunc(e, "front_right")}
                     />
                 </label>
-                <button type="submit" disabled={!canSubmit}>Submit</button>
+                <button 
+                    type="submit" 
+                    disabled={!canSubmit}
+                >Submit</button>
             </form>
             }
         </div>

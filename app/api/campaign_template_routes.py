@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.models import db, CampaignTemplate
+from app.models import db, CampaignTemplate, Room
 from app.forms import CampaignTemplateForm
 from flask_login import current_user, login_required
 import app.s3_helpers as s3
@@ -35,12 +35,29 @@ def post_char():
     # form manually to validate_on_submit can be used
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        print("---------------------")
-        print(form)
-        print("---------------------")
-        print(form.data)
-        print("---------------------")
+        # Post to AWS
+        sprite_file = form.data["background_sprite"]
+        sprite_file.filename = s3.get_unique_filename(sprite_file.filename)
+        upload = s3.upload_file_to_s3(sprite_file)
+        url = upload['url']
 
-        return {"message": "Being implemented."}, 201
+        rooms = []
+        room_ids = [room_data.split(";")[0] for room_data in form.data["rooms"].split(",")]
+        for room_id in room_ids:
+            room = Room.query.get(room_id)
+            rooms.append(room)
+
+        template = CampaignTemplate(
+            name=form.data["name"],
+            background_sprite=url,
+            map=form.data["rooms"],
+            user=current_user,
+            rooms=rooms
+        )
+
+        db.session.add(template)
+        db.session.commit()
+
+        return template.to_dict(), 201
     return { "errors": form.errors }, 400
     

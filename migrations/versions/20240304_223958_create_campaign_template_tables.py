@@ -41,11 +41,12 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('template_rooms',
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('template_id', sa.Integer(), nullable=False),
     sa.Column('room_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['template_id'], ['campaign_templates.id'], ),
     sa.ForeignKeyConstraint(['room_id'], ['rooms.id'], ),
-    sa.PrimaryKeyConstraint('template_id', 'room_id')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('environment_pieces',
     sa.Column('id', sa.Integer(), nullable=False),

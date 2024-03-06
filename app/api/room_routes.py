@@ -14,7 +14,7 @@ def all_temps():
     '''
 
     templates = Room.query.all()
-    return { "templates": [template.to_dict() for template in templates] }
+    return { "rooms": [template.to_dict() for template in templates] }
 
 @room_routes.route("/<int:id>")
 def single_temp(id):

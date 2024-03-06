@@ -13,7 +13,7 @@ const SingleCampaignTemplatePage = () => {
         dispatch(thunkGetTemplateById(tempId));
     }, [])
 
-    if (!temp && !temp?.name) return <h1>Loading Campaign Template Details...</h1>;
+    if (!temp && !temp.name) return <h1>Loading Campaign Template Details...</h1>;
     return (
         <>
             <div>
@@ -31,7 +31,7 @@ const SingleCampaignTemplatePage = () => {
                 </div>
             </div>
             <h3>Rooms</h3>
-            {temp.rooms.map(room => (
+            {temp.rooms?.map(room => (
                 <div key={room.id}>
                     <div>
                         {/* TODO: add room rendering */}                        
