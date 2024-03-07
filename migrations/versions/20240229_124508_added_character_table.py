@@ -25,7 +25,7 @@ def upgrade():
     op.create_table('characters',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=80), nullable=False),
+    sa.Column('name', sa.String(length=81), nullable=False),
     sa.Column('sprite', sa.String(), nullable=False),
     sa.Column('strength', sa.Integer(), nullable=False),
     sa.Column('dexterity', sa.Integer(), nullable=False),

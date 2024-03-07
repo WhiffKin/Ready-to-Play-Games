@@ -20,14 +20,25 @@ class User(db.Model, UserMixin):
 
     # Relationships:
     ## Many to Many:
-    # campaigns
     # fave_campaigns
 
     ## One to Many:
+    templates = db.relationship(
+        "CampaignTemplate",
+        back_populates="user",
+    )
+    campaigns = db.relationship(
+        "Campaign",
+        back_populates="user",
+    )
+    rooms = db.relationship(
+        "Room",
+        back_populates="user",
+    )
     characters = db.relationship(
         "Character",
         back_populates="user",
-        cascade="all, delete"
+        cascade="all, delete",
     )
 
     # To Dictionary Methods:

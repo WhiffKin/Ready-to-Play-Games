@@ -9,7 +9,7 @@ s3 = boto3.client(
    aws_secret_access_key=os.environ.get("S3_UPLOADSECRETACCESSKEY")
 )
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", ".webp"}
 BUCKET_NAME = os.environ.get("S3_PICTUREUPLOADBUCKET")
 S3_LOCATION = f"http://{BUCKET_NAME}.s3.amazonaws.com/"
 

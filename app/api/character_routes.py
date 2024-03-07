@@ -44,7 +44,6 @@ def post_char():
         if sprite_file:
             sprite_file.filename = s3.get_unique_filename(sprite_file.filename)
             upload = s3.upload_file_to_s3(sprite_file)
-            print(dir(sprite_file))
             url = upload['url']
         else: 
             # Otherwise use a default class picture
@@ -101,7 +100,7 @@ def update_char(id):
     char = Character.query.get(id)
 
     if not char:
-        return { "message": "Character doesn't exist." }, 
+        return { "message": "Character doesn't exist." }, 404
 
     # Check for authorization.
     if char.user_id != current_user.id:
@@ -134,7 +133,6 @@ def update_char(id):
                 
             sprite_file.filename = s3.get_unique_filename(sprite_file.filename)
             upload = s3.upload_file_to_s3(sprite_file)
-            print(dir(sprite_file))
             url = upload['url']
 
         char.name=form.data["name"]
