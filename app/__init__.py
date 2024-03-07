@@ -6,6 +6,10 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
 from .models import db, User
 from .api.user_routes import user_routes
+from .api.character_routes import character_routes
+from .api.campaign_template_routes import campaign_template_routes
+from .api.campaign_routes import campaign_routes
+from .api.room_routes import room_routes
 from .api.auth_routes import auth_routes
 from .seeds import seed_commands
 from .config import Config
@@ -27,6 +31,10 @@ app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
 app.register_blueprint(user_routes, url_prefix='/api/users')
+app.register_blueprint(character_routes, url_prefix='/api/characters')
+app.register_blueprint(campaign_template_routes, url_prefix='/api/templates')
+app.register_blueprint(campaign_routes, url_prefix='/api/campaigns')
+app.register_blueprint(room_routes, url_prefix='/api/rooms')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 db.init_app(app)
 Migrate(app, db)

@@ -12,7 +12,7 @@ export const selectUserArray = () =>
         users => Object.values(users)
     );
 
-// Action Strings
+// Action Types
 const ADD_USERS = "users/ADD_USERS";
 const ADD_USER = "users/ADD_USER";
 
@@ -59,7 +59,7 @@ function userReducer (state = initialState, action) {
         case ADD_USERS:
             return { ...action.payload.users.reduce((acc, user) => {
                 acc[user.id] = user;
-                return acc
+                return acc;
             }, {}) };
         default:
             return state;

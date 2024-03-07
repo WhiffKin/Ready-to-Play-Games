@@ -7,10 +7,18 @@ import {
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import userReducer from "./user";
+import characterReducer from "./character";
+import campaignTempReducer from "./campaignTemplate";
+import roomReducer from "./room";
+import campaignReducer from "./campaign";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   users: userReducer,
+  characters: characterReducer,
+  campaignTemps: campaignTempReducer,
+  campaigns: campaignReducer,
+  rooms: roomReducer,
 });
 
 let enhancer;

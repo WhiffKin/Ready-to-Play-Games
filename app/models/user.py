@@ -1,4 +1,4 @@
-from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .db import db, environment, SCHEMA
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -20,9 +20,26 @@ class User(db.Model, UserMixin):
 
     # Relationships:
     ## Many to Many:
-    # characters
-    # campaigns
     # fave_campaigns
+
+    ## One to Many:
+    templates = db.relationship(
+        "CampaignTemplate",
+        back_populates="user",
+    )
+    campaigns = db.relationship(
+        "Campaign",
+        back_populates="user",
+    )
+    rooms = db.relationship(
+        "Room",
+        back_populates="user",
+    )
+    characters = db.relationship(
+        "Character",
+        back_populates="user",
+        cascade="all, delete",
+    )
 
     # To Dictionary Methods:
     def to_dict(self):
