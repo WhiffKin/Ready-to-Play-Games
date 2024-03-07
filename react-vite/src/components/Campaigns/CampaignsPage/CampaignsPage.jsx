@@ -5,12 +5,14 @@ import { selectCampaignArray, thunkGetCampaigns } from "../../../redux/campaign"
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
 import DeleteCampaignModal from "./DeleteCampaignModal";
 import SignupFormModal from "../../SignupFormModal";
+import { useModal } from "../../../context/Modal";
 
 function CampaignsPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(state => state.session.user);
     const campaigns = useSelector(selectCampaignArray());
+    const {setModalContent} = useModal();
 
     useEffect(() => {
         if (!user) setModalContent(<SignupFormModal />);

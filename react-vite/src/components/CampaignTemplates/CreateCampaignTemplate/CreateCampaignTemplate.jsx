@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CreateRoomPage from "../CreateRoom";
 import CreateTemplatePage from "../CreateTemplatePage";
 import { useCampaignTemplateContext } from "../../../context/CampaignTemplate/CampaignTemplate";
@@ -6,7 +6,7 @@ import { useCampaignTemplateContext } from "../../../context/CampaignTemplate/Ca
 function CreateCampaignTemplate() {
     const { reset, setReset } = useCampaignTemplateContext();
     const [currentBuild, setCurrentBuild] = useState("");
-    
+
     useEffect(() => {
         if (reset){
             setCurrentBuild("");

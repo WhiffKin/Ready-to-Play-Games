@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRoomArray, thunkGetRooms, thunkPostRoom } from "../../../redux/room";
+import { selectRoomArray, thunkGetRooms } from "../../../redux/room";
 import { useNavigate } from "react-router-dom";
 import { thunkPostTemplate } from "../../../redux/campaignTemplate";
 
@@ -65,7 +65,7 @@ function CreateTemplatePage() {
         setValidation({});
     }
 
-    function addRoom(e) {
+    function addRoom() {
         // Validations
         const tempValid = {};
         if (typeof newRoom == "boolean") tempValid.room = "A room must be selected.";
@@ -91,8 +91,8 @@ function CreateTemplatePage() {
 
         const tempValid = {};
         if (!allRooms.length) tempValid.rooms = "A room must be added before submission."
-        if (!name.length) newValid.name = "Name is required.";
-        if (!backgroundSprite) newValid.backgroundSprite = "Background Sprite is required.";
+        if (!name.length) tempValid.name = "Name is required.";
+        if (!backgroundSprite) tempValid.backgroundSprite = "Background Sprite is required.";
 
         // Unsuccessful Validation
         if (Object.values(tempValid).length) {

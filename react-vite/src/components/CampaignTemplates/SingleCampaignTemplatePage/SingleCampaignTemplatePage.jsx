@@ -24,10 +24,11 @@ const SingleCampaignTemplatePage = () => {
                     <h1>{temp.name}</h1>
                 </div>
                 <div>
+                    {user &&
                     <OpenModalButton
                         buttonText="Run Campaign"
                         modalComponent={<CreateCampaignPage template={temp} />}
-                    />
+                    />}
                 </div>
             </div>
             <h3>Rooms</h3>

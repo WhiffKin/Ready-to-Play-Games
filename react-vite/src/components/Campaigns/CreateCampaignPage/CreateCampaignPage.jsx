@@ -104,7 +104,9 @@ function CreateCharacterPage({ editedCampaign, template }) {
                         ></input>
                         <p>{validation.description && validation.description}</p>
                     </label>
-                    <button>{editedCampaign ? "Update" : "Create"} Campaign</button>
+                    <button
+                        disabled={!canSubmit}
+                    >{editedCampaign ? "Update" : "Create"} Campaign</button>
                 </form>
             </div>
         </>
