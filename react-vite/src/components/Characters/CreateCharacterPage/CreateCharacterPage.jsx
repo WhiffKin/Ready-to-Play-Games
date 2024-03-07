@@ -85,22 +85,23 @@ function CreateCharacterPage({ editedChar }) {
         
         let max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
         let total = str + dex + wis + cha;
+        console.log(val, total)
         switch(type) {
             case "str":
                 total += val - str;
-                if (total <= max) return setStr(parseInt(val));
+                if (total <= max) return setStr(val ? parseInt(val) : 0);
                 break;
             case "dex":
                 total += val - dex;
-                if (total <= max) return setDex(parseInt(val));
+                if (total <= max) return setDex(val ? parseInt(val) : 0);
                 break;
             case "wis":
                 total += val - wis;
-                if (total <= max) return setWis(parseInt(val));
+                if (total <= max) return setWis(val ? parseInt(val) : 0);
                 break;
             case "cha":
                 total += val - cha;
-                if (total <= max) return setCha(parseInt(val));
+                if (total <= max) return setCha(val ? parseInt(val) : 0);
                 break;
         }
         return setValidation({...validation, stats: "Stats are maxxed out"});
