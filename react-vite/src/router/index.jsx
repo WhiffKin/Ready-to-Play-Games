@@ -12,10 +12,19 @@ import SingleCampaignTemplatePage from '../components/CampaignTemplates/SingleCa
 import CampaignTemplatesPage from '../components/CampaignTemplates/CampaignTemplatesPage/CampaignTemplatesPage';
 import { CampaignTemplateProvider } from '../context/CampaignTemplate/CampaignTemplate';
 import CreateCampaignTemplate from '../components/CampaignTemplates/CreateCampaignTemplate/CreateCampaignTemplate';
+import NotFound from '../components/NotFound';
+import CreateCampaignPage from '../components/Campaigns/CreateCampaignPage';
+import UpdateCampaignPage from '../components/Campaigns/UpdateCampaignPage/UpdateCampaignPage';
+import CampaignsPage from '../components/Campaigns/CampaignsPage';
 
 export const router = createBrowserRouter([
   {
     element: <Layout />,
+    errorElement: 
+      <>
+        <Layout />
+        <NotFound />
+      </>,
     children: [
       {
         path: "/",
@@ -67,6 +76,14 @@ export const router = createBrowserRouter([
         <CampaignTemplateProvider>
           <CreateCampaignTemplate />
         </CampaignTemplateProvider> 
+      },
+      {
+        path: "campaigns",
+        element: <CampaignsPage />
+      },
+      {
+        path: "campaigns/:campaignId",
+        element: <UpdateCampaignPage />
       },
     ],
   },

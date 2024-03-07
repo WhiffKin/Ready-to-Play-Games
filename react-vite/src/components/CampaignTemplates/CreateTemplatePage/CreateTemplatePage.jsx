@@ -279,6 +279,7 @@ function CreateTemplatePage() {
                                 accept="image/*"
                                 onChange={setBackgroundSpriteFunc}
                             />
+                            <p>{validation.backgroundSprite && validation.backgroundSprite}</p>
                         </label> 
                     </div>
                     <button 

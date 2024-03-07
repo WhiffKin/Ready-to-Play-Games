@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { selectIndividualTemplate, thunkGetTemplateById } from "../../../redux/campaignTemplate";
+import CreateCampaignPage from "../../Campaigns/CreateCampaignPage";
+import OpenModalButton from "../../OpenModalButton/OpenModalButton";
 
 const SingleCampaignTemplatePage = () => {
     const { tempId } = useParams();
@@ -13,7 +15,7 @@ const SingleCampaignTemplatePage = () => {
         dispatch(thunkGetTemplateById(tempId));
     }, [])
 
-    if (!temp && !temp.name) return <h1>Loading Campaign Template Details...</h1>;
+    if (!temp && !temp?.name) return <h1>Loading Campaign Template Details...</h1>;
     return (
         <>
             <div>
@@ -22,12 +24,10 @@ const SingleCampaignTemplatePage = () => {
                     <h1>{temp.name}</h1>
                 </div>
                 <div>
-                    <button 
-                        onClick={() => alert("Run campaign not implemented.")} 
-                        disabled={!user}
-                    >
-                        Run Campaign
-                    </button>
+                    <OpenModalButton
+                        buttonText="Run Campaign"
+                        modalComponent={<CreateCampaignPage template={temp} />}
+                    />
                 </div>
             </div>
             <h3>Rooms</h3>

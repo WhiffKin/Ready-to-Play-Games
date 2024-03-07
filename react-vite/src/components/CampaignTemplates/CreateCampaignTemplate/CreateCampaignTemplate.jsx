@@ -6,11 +6,7 @@ import { useCampaignTemplateContext } from "../../../context/CampaignTemplate/Ca
 function CreateCampaignTemplate() {
     const { reset, setReset } = useCampaignTemplateContext();
     const [currentBuild, setCurrentBuild] = useState("");
-
-    function onSubmit(e) {
-        e.preventDefault(); 
-    }
-
+    
     useEffect(() => {
         if (reset){
             setCurrentBuild("");
