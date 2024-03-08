@@ -73,7 +73,7 @@ def post_char():
         # If a user submitted with more skill points than 
         # they should have for character creation, set skills
         # to a value of 7
-        if 40 > (char.strength 
+        if 40 < (char.strength 
                + char.dexterity 
                + char.wisdom 
                + char.charisma):
@@ -157,23 +157,22 @@ def update_char(id):
         char.dexterity=form.data["dexterity"]
         char.wisdom=form.data["wisdom"]
         char.charisma=form.data["charisma"]
-        char.experience=char.experience
         char.alignment=form.data["alignment"]
         char.class_type=form.data["classType"]
         
         # If a user submitted with more skill points than 
         # they should have for their character, set skills
         # to a value of 7 and experience to 0
-        if 40 + floor(sqrt(char.experience / 2)) > (char.strength 
-                                                    + char.dexterity 
-                                                    + char.wisdom 
-                                                    + char.charisma):
+        if 40 + floor(sqrt(char.experience / 2)) < (char.strength 
+                                                  + char.dexterity 
+                                                  + char.wisdom 
+                                                  + char.charisma):
             char.strength   = 7
             char.dexterity  = 7
             char.wisdom     = 7
             char.charisma   = 7
             char.experience = 0
-        
+            
         db.session.add(char)
         db.session.commit()
 

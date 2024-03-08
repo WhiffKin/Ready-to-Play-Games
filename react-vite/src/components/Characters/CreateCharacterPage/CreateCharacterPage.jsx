@@ -84,7 +84,7 @@ function CreateCharacterPage({ editedChar }) {
         const val = e.target.value;
         if (val < 0) return;
         
-        let max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
+        const max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
         let total = str + dex + wis + cha;
         console.log(val, total)
         switch(type) {
@@ -108,6 +108,18 @@ function CreateCharacterPage({ editedChar }) {
         return setValidation({...validation, stats: "Stats are maxxed out"});
     }
 
+    const randomizeStats = () => {
+        const newStats = [0,0,0,0];
+        const max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
+        for (let i = 0; i < max; i++)
+            newStats[Math.floor(Math.random() * 4)]++;
+
+        setStr(newStats[0]);
+        setDex(newStats[1]);
+        setWis(newStats[2]);
+        setCha(newStats[3]);
+    }
+
     // Sets all fields to a random value
     // TODO: implement gpt call for desc randomizing
     const randomize = e => {
@@ -127,14 +139,7 @@ function CreateCharacterPage({ editedChar }) {
             "Sorcerer"]
         ));
 
-        const newStats = [0,0,0,0];
-        for (let i = 0; i < 40; i++)
-            newStats[Math.floor(Math.random() * 4)]++;
-
-        setStr(newStats[0]);
-        setDex(newStats[1]);
-        setWis(newStats[2]);
-        setCha(newStats[3]);
+        randomizeStats();
     }
 
     // Form submission
@@ -146,7 +151,8 @@ function CreateCharacterPage({ editedChar }) {
         const newValid = {};
         if (name.length < 2) newValid.name = "Name must have a minimum length of 2.";
         if (name.length > 40) newValid.name = "Name must have a maximum length of 40.";
-        if (str + dex + wis + cha < 40) newValid.stats = "There are still remaining stat points.";
+        const max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
+        if (str + dex + wis + cha < max) newValid.stats = "There are still remaining stat points.";
 
         // Unsuccessful validation
         if (Object.values(newValid).length) {
