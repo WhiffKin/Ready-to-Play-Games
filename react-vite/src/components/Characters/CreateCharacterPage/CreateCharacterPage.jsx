@@ -6,6 +6,7 @@ import names from "./names";
 import { thunkPostCharacter, thunkUpdateCharacter } from "../../../redux/character";
 import SignupFormModal from "../../SignupFormModal";
 import { useModal } from "../../../context/Modal";
+import "./CreateCharacterPage.css";
 
 function CreateCharacterPage({ editedChar }) {
     const dispatch = useDispatch();
@@ -81,7 +82,7 @@ function CreateCharacterPage({ editedChar }) {
     // Increment stats iff the total is within 40 (base level stat points)
     const incrementStats = (e, type) => {
         const val = e.target.value;
-        if (val > 20 || val < 0) return;
+        if (val < 0) return;
         
         let max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
         let total = str + dex + wis + cha;
@@ -143,8 +144,9 @@ function CreateCharacterPage({ editedChar }) {
 
         // Validations
         const newValid = {};
-        if (name.length < 2) newValid.name = "Name must have a minimum length of 2."
-        if (str + dex + wis + cha < 40) newValid.stats = "There are still remaining stat points."
+        if (name.length < 2) newValid.name = "Name must have a minimum length of 2.";
+        if (name.length > 40) newValid.name = "Name must have a maximum length of 40.";
+        if (str + dex + wis + cha < 40) newValid.stats = "There are still remaining stat points.";
 
         // Unsuccessful validation
         if (Object.values(newValid).length) {
@@ -181,9 +183,9 @@ function CreateCharacterPage({ editedChar }) {
 
     return (
         <>
-            <div> 
-                <label>
-                    <img src={sprite} alt="Character sprite preview"/>
+            <div className="create_character-container"> 
+                <label className="create_character-image">
+                    <img src={sprite} alt="Character sprite preview" className="cursor-pointer"/>
                     <input
                         type="file"
                         accept="image/*"
@@ -193,10 +195,11 @@ function CreateCharacterPage({ editedChar }) {
                 <form 
                     onSubmit={onSubmit}
                     encType="multipart/form-data"
+                    className="create_character-form"
                 >
                     <h3>Character Details:</h3>
                     <label>
-                        Name
+                        <span>Name</span>
                         <input
                             placeholder=""
                             value={name}
@@ -206,7 +209,7 @@ function CreateCharacterPage({ editedChar }) {
                         <p>{validation.name && validation.name}</p>
                     </label>
                     <label>
-                        Alignment
+                        <span>Alignment</span>
                         <select
                             type="select"
                             value={alignment}
@@ -222,7 +225,7 @@ function CreateCharacterPage({ editedChar }) {
                         <p>{validation.alignment && validation.alignment}</p>
                     </label>
                     <label>
-                        Class
+                        <span>Class</span>
                         <select
                             type="select"
                             value={charClass}
@@ -235,50 +238,61 @@ function CreateCharacterPage({ editedChar }) {
                         </select>
                         <p>{validation.classType && validation.classType}</p>
                     </label>
-                    <label>
-                        Description
+                    <label id="create_character-form-description">
+                        <span>Description</span>
                         <textarea
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                         ></textarea>
                     </label>
                     <h3>Character Stats:</h3>
-                    <label>
-                        Strength
-                        <input
-                            type="number"
-                            value={str}
-                            onChange={e => incrementStats(e, "str")}
-                        ></input>
+                    <div className="create_character-form-stats">
+                        <label>
+                            Strength
+                            <input
+                                type="number"
+                                value={str}
+                                onChange={e => incrementStats(e, "str")}
+                                onKeyDown={"return false"}
+                            ></input>
+                        </label>
+                        <label>
+                            Dexterity
+                            <input
+                                type="number"
+                                value={dex}
+                                onChange={e => incrementStats(e, "dex")}
+                            ></input>
+                        </label>
+                        <label>
+                            Wisdom
+                            <input
+                                type="number"
+                                value={wis}
+                                onChange={e => incrementStats(e, "wis")}
+                            ></input>
+                        </label>
+                        <label>
+                            Charisma
+                            <input
+                                type="number"
+                                value={cha}
+                                onChange={e => incrementStats(e, "cha")}
+                            ></input>
+                        </label>
+                    </div>
+                    <label id="create_character-stats-remaining">
+                        <p>{validation.stats && validation.stats}</p>
+                        <h5>Stat points left: {40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0) - str - wis - dex - cha}</h5>
                     </label>
-                    <label>
-                        Dexterity
-                        <input
-                            type="number"
-                            value={dex}
-                            onChange={e => incrementStats(e, "dex")}
-                        ></input>
-                    </label>
-                    <label>
-                        Wisdom
-                        <input
-                            type="number"
-                            value={wis}
-                            onChange={e => incrementStats(e, "wis")}
-                        ></input>
-                    </label>
-                    <label>
-                        Charisma
-                        <input
-                            type="number"
-                            value={cha}
-                            onChange={e => incrementStats(e, "cha")}
-                        ></input>
-                    </label>
-                    <h5>Stat points left: {40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0) - str - wis - dex - cha}</h5>
-                    <div>
+                    <div id="create_character-button_container" >
                         <button onClick={randomize}>Randomize</button>
                         <button type="submit" disabled={!canSubmit}>Submit</button>
+                        {editedChar && 
+                        <button onClick={e => {
+                            e.preventDefault();
+                            navigate(`/characters/${editedChar.id}`)
+                        }}>Cancel</button>}
                     </div>
                 </form>
             </div>

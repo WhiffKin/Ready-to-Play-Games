@@ -118,6 +118,21 @@ def update_char(id):
         
         url = char.sprite
         sprite_file = form.data["sprite"]
+
+        if url in (
+            ["https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png",
+            "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png",
+            "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png",
+            "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"]):
+            value = form.data["classType"]
+            if value == "Monk":
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Monk.png"
+            elif value == "Paladin":
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Paladin.png"
+            elif value == "Ranger":
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ranger.png"
+            else:
+                url = "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Sorcerer.png"
         
         # Post to AWS if file is provided
         if sprite_file:

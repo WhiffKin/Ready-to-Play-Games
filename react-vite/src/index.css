@@ -5,6 +5,22 @@ body {
     padding: 0;
 }
 
+button {
+    cursor: pointer;
+}
+
 .cursor-pointer{
     cursor: pointer;
+}
+
+img {
+    image-rendering: pixelated;
+}
+
+input, h1, h2, h3, h4, h5, h6 {
+    all: unset;
+}
+
+div, span, p, h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
 }
