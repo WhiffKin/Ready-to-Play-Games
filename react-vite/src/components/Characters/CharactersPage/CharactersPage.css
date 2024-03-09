@@ -1,0 +1,28 @@
+.character_page-container {
+    height: 200px;
+    width: 200px;
+    transform: translate(0,0);
+    background-color: antiquewhite;
+    cursor: pointer;
+}
+.character_page-container img {
+    height: inherit;
+    width: inherit;
+    border: 2px solid rgb(221, 201, 175);
+    border-radius: 10px;
+    background-color: antiquewhite;
+}
+.character_page-container h3,
+.character_page-container h5 {
+    position: fixed;
+    left: 10px;
+    color: rgb(139, 122, 99);
+    background-color: antiquewhite;
+}
+.character_page-container h3 {
+    font-size: larger;
+    bottom: 35px;
+}
+.character_page-container h5 {
+    bottom: 10px;
+}

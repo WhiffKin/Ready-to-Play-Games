@@ -26,6 +26,7 @@ function CreateCharacterPage({ editedChar }) {
     const [cha, setCha] = useState(editedChar ? editedChar.charisma : 10);
     
     const [validation, setValidation] = useState({});
+    const [clearStatValid, setClearStatValid] = useState();
     const [canSubmit, setCanSubmit] = useState(true);
 
     useEffect(() => {
@@ -79,6 +80,10 @@ function CreateCharacterPage({ editedChar }) {
         }
     }
 
+    const resetValidation = () => {
+        setValidation({...validation, stats: null});
+    }
+
     // Increment stats iff the total is within 40 (base level stat points)
     const incrementStats = (e, type) => {
         const val = e.target.value;
@@ -86,26 +91,30 @@ function CreateCharacterPage({ editedChar }) {
         
         const max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
         let total = str + dex + wis + cha;
-        console.log(val, total)
         switch(type) {
             case "str":
                 total += val - str;
-                if (total <= max) return setStr(val ? parseInt(val) : 0);
+                if (total <= max) setStr(val ? parseInt(val) : 0);
                 break;
             case "dex":
                 total += val - dex;
-                if (total <= max) return setDex(val ? parseInt(val) : 0);
+                if (total <= max) setDex(val ? parseInt(val) : 0);
                 break;
             case "wis":
                 total += val - wis;
-                if (total <= max) return setWis(val ? parseInt(val) : 0);
+                if (total <= max) setWis(val ? parseInt(val) : 0);
                 break;
             case "cha":
                 total += val - cha;
-                if (total <= max) return setCha(val ? parseInt(val) : 0);
+                if (total <= max) setCha(val ? parseInt(val) : 0);
                 break;
         }
-        return setValidation({...validation, stats: "Stats are maxxed out"});
+
+        if (total <= max) return resetValidation();
+
+        if (clearStatValid) clearTimeout(clearStatValid);
+        setClearStatValid(setTimeout(resetValidation, 2000));
+        return setValidation({...validation, stats: "Stats are maxxed out."});
     }
 
     const randomizeStats = () => {

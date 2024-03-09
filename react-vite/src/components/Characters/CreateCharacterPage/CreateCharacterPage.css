@@ -58,7 +58,7 @@
     padding: 10px;
     border-radius: 20px;
     box-shadow: 0 0 25px -17px black;
-    width: 300px;
+    width: 400px;
     height: 600px;
     
     color: white;
@@ -67,11 +67,13 @@
 .create_character-form h3 {
     height: 0;
     padding-bottom: 20px;
-    font-size: xx-large;
+    font-size: x-large;
 }
 .create_character-form p {
     position: fixed;
-    top: 17px;
+    font-size: small;
+    text-align: center;
+    top: 18px;
     left: 0;
 
     color: rgb(39, 255, 169);
@@ -92,7 +94,7 @@
 .create_character-form label span {
     position: absolute;
     left: 10px;
-    top: -14px;
+    top: -18px;
 
     padding: 0 3px;
 
@@ -152,7 +154,6 @@
 }
 #create_character-stats-remaining p {
     top: 10px;
-    left: 22px;
 }
 
 #create_character-button_container {
