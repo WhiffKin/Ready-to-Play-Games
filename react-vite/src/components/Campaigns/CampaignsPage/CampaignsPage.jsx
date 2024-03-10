@@ -15,7 +15,7 @@ function CampaignsPage() {
     const {setModalContent} = useModal();
 
     useEffect(() => {
-        if (!user) setModalContent(<SignupFormModal />);
+        if (!user) navigate("/");
     })
 
     useEffect(() => {

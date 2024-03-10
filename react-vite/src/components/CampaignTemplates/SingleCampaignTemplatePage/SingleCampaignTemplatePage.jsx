@@ -37,12 +37,10 @@ const SingleCampaignTemplatePage = () => {
                         className="campaign_template-room_card"
                     >
                         <div>
-                            <div>
-                                <img 
-                                    src={room.backgroundSprite}
-                                    className={`campaign_template-room-floor`}
-                                />
-                            </div>
+                            <img 
+                                src={room.backgroundSprite}
+                                className={`campaign_template-room-floor`}
+                            />
                             {room.pieces.map(piece => 
                                 <div key={piece.id}>
                                     <img 
@@ -56,7 +54,7 @@ const SingleCampaignTemplatePage = () => {
                                 </div>)
                             }                       
                         </div>
-                        <span>{room.name}</span>
+                        <span>{room.name}asdfasdfasdfasdfasdf</span>
                     </div>
                 ))}
             </div>

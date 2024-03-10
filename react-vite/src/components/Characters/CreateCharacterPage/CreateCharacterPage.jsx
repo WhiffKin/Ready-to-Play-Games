@@ -41,7 +41,7 @@ function CreateCharacterPage({ editedChar }) {
     }, [])
 
     useEffect(() => {
-        if (!user) setModalContent(<SignupFormModal />);
+        if (!user) navigate("/");
     })
 
     // Set new Sprite

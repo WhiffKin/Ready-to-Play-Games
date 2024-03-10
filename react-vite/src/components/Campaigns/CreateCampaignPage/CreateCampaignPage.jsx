@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SignupFormModal from "../../SignupFormModal";
 import { useModal } from "../../../context/Modal";
 import { thunkPostCampaign, thunkUpdateCampaign } from "../../../redux/campaign";
+import "./CreateCampaignPage.css";
 
 function CreateCharacterPage({ editedCampaign, template }) {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function CreateCharacterPage({ editedCampaign, template }) {
     const [canSubmit, setCanSubmit] = useState(true);
 
     useEffect(() => {
-        if (!user) setModalContent(<SignupFormModal />);
+        if (!user) navigate("/");
     })
 
     // Set new Sprite
@@ -75,19 +76,24 @@ function CreateCharacterPage({ editedCampaign, template }) {
         <>
             <div> 
                 <form 
+                    className="create_campaign-container"
                     onSubmit={onSubmit}
                     encType="multipart/form-data"
                 >
-                    <label>
-                        <img src={sprite} alt="Character sprite preview"/>
+                    <label className="create_campaign-image cursor-pointer">
+                        <img 
+                            src={sprite}
+                            alt="Campaign preview image"
+                        />
                         <input
+                            id="create_campaign-hidden_input"
                             type="file"
                             accept="image/*"
                             onChange={onImageChange}
                         />
                     </label>
                     <label>
-                        Name
+                        <span>Name</span>
                         <input
                             placeholder=""
                             value={name}
@@ -96,7 +102,7 @@ function CreateCharacterPage({ editedCampaign, template }) {
                         <p>{validation.name && validation.name}</p>
                     </label>
                     <label>
-                        Description
+                        <span>Description</span>
                         <input
                             placeholder=""
                             value={description}

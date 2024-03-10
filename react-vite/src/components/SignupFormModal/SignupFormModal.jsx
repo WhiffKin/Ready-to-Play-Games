@@ -16,12 +16,14 @@ function SignupFormModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      return setErrors({
-        confirmPassword:
-          "Confirm Password field must be the same as the Password field",
-      });
-    }
+    const tempErr = {};
+    if (password.length < 6)
+      tempErr.password = "Password must be 6+ characters."
+    if (password !== confirmPassword) 
+      tempErr.confirmPassword = "Passwords must match.";
+    if (email.split("@").length != 2)
+      tempErr.email = "Email is not valid.";
+    if (Object.values(tempErr).length) return setErrors(tempErr);
 
     const serverResponse = await dispatch(
       thunkSignup({
@@ -41,48 +43,48 @@ function SignupFormModal() {
   return (
     <>
       <h1>Sign Up</h1>
-      {errors.server && <p>{errors.server}</p>}
+      <p>{errors.server && errors.server}</p>
       <form onSubmit={handleSubmit}>
         <label>
-          Email
+          <span>Email</span>
           <input
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          <p>{errors.email && errors.email}</p>
         </label>
-        {errors.email && <p>{errors.email}</p>}
         <label>
-          Username
+          <span>Username</span>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+          <p>{errors.username && errors.username}</p>
         </label>
-        {errors.username && <p>{errors.username}</p>}
         <label>
-          Password
+          <span>Password</span>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <p>{errors.password && errors.password}</p>
         </label>
-        {errors.password && <p>{errors.password}</p>}
         <label>
-          Confirm Password
+          <span>Confirm Password</span>
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+          <p>{errors.confirmPassword && errors.confirmPassword}</p>
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
         <button type="submit">Sign Up</button>
       </form>
     </>

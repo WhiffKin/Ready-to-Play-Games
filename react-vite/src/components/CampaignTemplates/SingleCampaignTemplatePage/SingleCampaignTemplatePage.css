@@ -23,6 +23,10 @@
 
 .campaign_template-room_container {
     display: flex;
+    justify-content: center;
+
+    overflow-x: scroll;
+    height: max-content;
 }
 
 .campaign_template-room_card {
@@ -34,6 +38,10 @@
     height: 250px;
     transform: translate(0,0);
 }
+.campaign_template-room_card div {
+    width: 250px;
+    height: 250px;
+}
 .campaign_template-room_card * {
     position: fixed;
     display: flex;
@@ -42,14 +50,19 @@
 }
 .campaign_template-room_card span {
     top: 180px;
-    width: 100%;
+    margin: auto;
+    max-width: 240px;
+    width: fit-content;
     height: 60px;
-    text-align: center;
+    
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .campaign_template-room-floor {
     transform: perspective(250px) translate3d(0, 0, 0) rotateX(60deg);
-    z-index: 2;
+    z-index: 0;
     
     width: 170px;
     height: 170px;

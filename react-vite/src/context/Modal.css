@@ -20,7 +20,7 @@
 
 #modal-content {
   position: absolute;
-  background-color:white;
+  background-color:#684e9f;
 
   display: flex;
   flex-direction: column;
@@ -30,4 +30,84 @@
 
   border-radius: 20px;
   box-shadow: 0 0 50px -15px black;
+}
+#modal-content h1 {
+  font-size: x-large;
+  margin-bottom: 25px;
+}
+#modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+#modal-content * {
+  color: white;
+}
+#modal-content form p {
+    position: fixed;
+    font-size: small;
+    text-align: center;
+    top: 18px;
+    left: 0;
+
+    color: rgb(39, 255, 169);
+    
+    height: 40px;
+    width: 100%;
+}
+#modal-content form input,
+#modal-content form textarea {
+    padding: 5px;
+    width: 100%;
+    height: 20px;
+
+    border: 2px solid white;
+    border-radius: 5px;
+
+    color: white;
+    background-color: #684e9f;
+}
+#modal-content form label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+    gap: 5px;
+    
+    width: 100%;
+    height: 30px;
+    transform: translate(0,0);
+}
+#modal-content form label span {
+    position: absolute;
+    left: 10px;
+    top: -18px;
+
+    padding: 0 3px;
+
+    color: white;
+    background-color: #684e9f;
+}
+#modal-content form label p {
+    position: fixed;
+    font-size: small;
+    text-align: center;
+    top: 18px;
+    left: 0;
+
+    color: rgb(39, 255, 169);
+    
+    height: 40px;
+    width: 100%;
+}
+#modal-content form button {
+  padding: 5px 20px;
+  margin: auto;
+  width: max-content;
+  height: 100%;
+
+  border: 2px solid white;
+  border-radius: 5px;
+
+  color: white;
+  background-color: #684e9f;
 }

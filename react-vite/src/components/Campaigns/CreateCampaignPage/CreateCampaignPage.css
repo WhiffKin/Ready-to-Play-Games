@@ -1,0 +1,23 @@
+.create_campaign-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+.create_campaign-image img {
+    width: inherit;
+    height: inherit;
+    margin: auto;    
+    width: 250px;
+    height: 250px;
+}
+.create_campaign-image img:hover {
+    transition: .2s filter;
+    filter: brightness(50%);
+}
+
+.create_campaign-image #create_campaign-hidden_input {
+    width: 0;
+    height: 0;
+    padding: 0;
+    border: none;
+}
