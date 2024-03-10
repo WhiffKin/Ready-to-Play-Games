@@ -4,7 +4,7 @@ from sqlalchemy.sql import text
 
 # Adds a demo user, you can add other characters here if you want
 def seed_templates(all_users):
-    template = CampaignTemplate(map="1;s:13-d:8,2;e:1,3;e:2", name="A Great Test!", recommended_level=0, background_sprite="No Image", user=all_users[0])
+    template = CampaignTemplate(map="1;s:13-d:8,2;e:1,3;e:2", name="A Great Test!", recommended_level=0, background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/template+background.png", user=all_users[0])
 
     room1 = Room(user=all_users[0], templates=[template], name="Grass Field", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ground+Grass.png")
     room2 = Room(user=all_users[0], templates=[template], name="Dungeon Entrance", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ground+Stone.png")

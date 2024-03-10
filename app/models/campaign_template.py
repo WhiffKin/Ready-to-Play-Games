@@ -50,6 +50,7 @@ class CampaignTemplate(db.Model):
             'id': self.id,
             'backgroundSprite': self.background_sprite,
             'name': self.name,
+            'recLevel': self.recommended_level,
             'rooms': [room.to_dict() for room in self.rooms],
         }
     

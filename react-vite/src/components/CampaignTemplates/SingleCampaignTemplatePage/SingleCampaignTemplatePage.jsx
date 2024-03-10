@@ -28,8 +28,8 @@ const SingleCampaignTemplatePage = () => {
                         modalComponent={<CreateCampaignPage template={temp} />}
                     />}
                 </div>
+                
             </div>
-            <h3>Rooms</h3>
             <div className="campaign_template-room_container">
                 {temp.rooms?.map(room => (
                     <div 

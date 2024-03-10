@@ -9,16 +9,30 @@
     flex-direction: column;
     justify-content: start;
     align-items: starts;
-    
-    height: 200px;
+
+    margin: 10px 0;
+    padding: 10px;
+    height: 400px;
+    width: 100%;
+    border-radius: 10px;
+
+    background-color: #dbd3de;
 }
 .campaign_template-header img {
-    height: 640px;
-    width: 1000px;
+    height: 365px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
 }
 .campaign_template-header div {
     display: flex;
     gap: 20px;
+}
+.campaign_template-header h1 {
+    font-size: x-large;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .campaign_template-room_container {
@@ -51,8 +65,7 @@
 .campaign_template-room_card span {
     top: 180px;
     margin: auto;
-    max-width: 240px;
-    width: fit-content;
+    width: 240px;
     height: 60px;
     
     white-space: nowrap;
@@ -79,14 +92,14 @@
 .campaign_template-room-back_center,
 .campaign_template-room-back_right {
     z-index: 7;
-    width: 50px;
+    width: 40px;
     height: 50px;
 }
 .campaign_template-room-front_left,
 .campaign_template-room-front_center,
 .campaign_template-room-front_right {
     z-index: 10;
-    width: 50px;
+    width: 40px;
     height: 50px;
 }
 .campaign_template-room-back_left {
