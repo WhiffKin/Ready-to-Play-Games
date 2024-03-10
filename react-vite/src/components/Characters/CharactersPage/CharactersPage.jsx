@@ -17,7 +17,11 @@ function CharactersPage() {
     return (
         <>
             {characters.map(character => (
-                <div key={character.id} className="character_page-container" onClick={() => navigate(`/characters/${character.id}`)}>
+                <div 
+                    key={character.id} 
+                    className="character_page-container cursor-pointer" 
+                    onClick={() => navigate(`/characters/${character.id}`)}
+                >
                     <img src={character.sprite} alt={`${character.name} character sprite.`} />
                     <h3>{character.name}</h3>
                     <h5>{character.classType}</h5>

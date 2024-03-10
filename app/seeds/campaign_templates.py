@@ -6,15 +6,19 @@ from sqlalchemy.sql import text
 def seed_templates(all_users):
     template = CampaignTemplate(map="1;s:13-d:8,2;e:1,3;e:2", name="A Great Test!", recommended_level=0, background_sprite="No Image", user=all_users[0])
 
-    room1 = Room(user=all_users[0], templates=[template], name="Grass Field", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Grass.png")
-    room2 = Room(user=all_users[0], templates=[template], name="Dungeon Entrance", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
-    room3 = Room(user=all_users[0], templates=[template], name="A Special Boss??", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Stone.png")
+    room1 = Room(user=all_users[0], templates=[template], name="Grass Field", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ground+Grass.png")
+    room2 = Room(user=all_users[0], templates=[template], name="Dungeon Entrance", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ground+Stone.png")
+    room3 = Room(user=all_users[0], templates=[template], name="A Special Boss??", background_sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Ground+Stone.png")
     rooms = [room1, room2, room3]
 
     piece1 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_left")
     piece2 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Bush.png", location="back_right")
+    piece3 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Short+Grass.png", location="front_right")
     piece3 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Short+Grass.png", location="front_center")
-    env_pieces = [piece1, piece2, piece3]
+    piece3 = EnvironmentPiece(room=room1, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Short+Grass.png", location="front_left")
+    piece4 = EnvironmentPiece(room=room2, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Dungeon+Wall.png", location="wall")
+    piece5 = EnvironmentPiece(room=room3, sprite="https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/Dungeon+Wall.png", location="wall")
+    env_pieces = [piece1, piece2, piece3, piece4, piece5]
     
     db.session.add(template)
     db.session.add_all(rooms)

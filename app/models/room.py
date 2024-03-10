@@ -34,7 +34,7 @@ class Room(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'background_sprite': self.background_sprite,
+            'backgroundSprite': self.background_sprite,
             'pieces': [piece.to_dict() for piece in self.env_pieces],
         }
     
