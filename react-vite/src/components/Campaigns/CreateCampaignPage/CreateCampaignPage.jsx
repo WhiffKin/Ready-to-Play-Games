@@ -9,11 +9,11 @@ import "./CreateCampaignPage.css";
 function CreateCharacterPage({ editedCampaign, template }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { setModalContent } = useModal();
+    const { closeModal } = useModal();
     const user = useSelector(state => state.session.user);
 
     const [custSprite, setCustSprite] = useState();
-    const [sprite, setSprite] = useState(editedCampaign ? editedCampaign.sprite : "");    
+    const [sprite, setSprite] = useState(editedCampaign ? editedCampaign.backgroundSprite : "");    
     const [name, setName] = useState(editedCampaign ? editedCampaign.name : "");
     const [description, setDescription] = useState(editedCampaign ? editedCampaign.description : "");
     
@@ -70,6 +70,7 @@ function CreateCharacterPage({ editedCampaign, template }) {
 
         // Successful Submission
         navigate(`/campaigns`);
+        closeModal();
     }
 
     return (
@@ -80,11 +81,17 @@ function CreateCharacterPage({ editedCampaign, template }) {
                     onSubmit={onSubmit}
                     encType="multipart/form-data"
                 >
-                    <label className="create_campaign-image cursor-pointer">
-                        <img 
-                            src={sprite}
-                            alt="Campaign preview image"
-                        />
+                    <label 
+                        id="create_campaign-image"
+                        className="create_campaign-image cursor-pointer"
+                    >
+                        <span>Background Image</span>
+                        <div>
+                            <img 
+                                src={sprite ? sprite : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Campaign preview image"
+                            />
+                        </div>
                         <input
                             id="create_campaign-hidden_input"
                             type="file"

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectRoomArray, thunkGetRooms } from "../../../redux/room";
 import { useNavigate } from "react-router-dom";
 import { thunkPostTemplate } from "../../../redux/campaignTemplate";
+import { isPhotoFile } from "../../../helperFuncs";
 
 function CreateTemplatePage() {
     const dispatch = useDispatch();
@@ -13,7 +14,7 @@ function CreateTemplatePage() {
     const [canSubmit, setCanSubmit] = useState(true);
     const [showTemplate, setShowTemplate] = useState(false);
     const [name, setName] = useState("");
-    const [backgroundSprite, setBackgroundSprite] = useState();
+    const [backgroundSprite, setBackgroundSprite] = useState({});
     const [allRooms, setAllRooms] = useState([]);
     const [newRoom, setNewRoom] = useState(false);
     const [skillChecks, setSkillChecks] = useState({});
@@ -47,7 +48,8 @@ function CreateTemplatePage() {
 
         const newValid = {};
         if (!name.length) newValid.name = "Name is required.";
-        if (!backgroundSprite) newValid.backgroundSprite = "Background Sprite is required.";
+        if (!backgroundSprite?.file) newValid.backgroundSprite = "Background Sprite is required.";
+        if (!isPhotoFile(backgroundSprite?.file?.name)) newValid.backgroundSprite = "Background sprite must be a photo."
 
         // Unsuccessful validation.
         if (Object.values(newValid).length) return setValidation(newValid);
@@ -119,34 +121,43 @@ function CreateTemplatePage() {
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form 
+            onSubmit={onSubmit}
+            className="create_campaign_temp-create_template_form"
+        >
             {showTemplate ? 
             <>
-                <h1>{name}</h1>
-                {allRooms.map((roomData, index) => {
-                    const roomId = roomData.split(";")[0];
-                    const skillChecks = roomData.split(";")[1].split("-")
-                    const room = rooms.find(room => room.id == roomId);
-                    return (
-                        <div key={index}>
-                            <h1>{room.name}</h1>
-                            <h3>Skill Check{skillChecks.length > 1 && "s"}:</h3>
-                            {skillChecks.map(check => {
-                                check = check.split(":");
-                                switch(check[0]) {
-                                    case "s":
-                                        return <span key={check[0]}>Strength: {check[1]}</span>
-                                    case "w":
-                                        return <span key={check[0]}>Wisdom: {check[1]}</span>
-                                    case "c":
-                                        return <span key={check[0]}>Charisma: {check[1]}</span>
-                                    case "d":
-                                        return <span key={check[0]}>Dexterity: {check[1]}</span>
-                                }
-                            })}
-                        </div>
-                    )
-                })}
+                <h1
+                    className="create_campaign_temp-create_template-heading"
+                >{name}</h1>
+                <div
+                    className="create_campaign_temp-create_template-rooms"
+                >
+                    {allRooms.map((roomData, index) => {
+                        const roomId = roomData.split(";")[0];
+                        const skillChecks = roomData.split(";")[1].split("-")
+                        const room = rooms.find(room => room.id == roomId);
+                        return (
+                            <div key={index}>
+                                <h1>{room.name}</h1>
+                                <h3>Skill Check{skillChecks.length > 1 && "s"}:</h3>
+                                {skillChecks.map(check => {
+                                    check = check.split(":");
+                                    switch(check[0]) {
+                                        case "s":
+                                            return <span key={check[0]}>Strength: {check[1]}</span>
+                                        case "w":
+                                            return <span key={check[0]}>Wisdom: {check[1]}</span>
+                                        case "c":
+                                            return <span key={check[0]}>Charisma: {check[1]}</span>
+                                        case "d":
+                                            return <span key={check[0]}>Dexterity: {check[1]}</span>
+                                    }
+                                })}
+                            </div>
+                        )
+                    })}
+                </div>
                 {newRoom ? 
                 <>
                     <label>
@@ -262,10 +273,11 @@ function CreateTemplatePage() {
                 </>} 
             </> :
                 <>
-                    <div>
+                    <div className="create_campaign_temp-form">
                         <label>
-                            Name
+                            <span>Name</span>
                             <input
+                                id
                                 type="text"
                                 value={name}
                                 onChange={e => setName(e.target.value)}
@@ -273,20 +285,26 @@ function CreateTemplatePage() {
                             <p>{validation.name && validation.name}</p>
                         </label>
                         <label>
-                            Choose a background for this template.
+                            <span>Background Image</span>
+                            <img 
+                                className="cursor-pointer"
+                                src={backgroundSprite.url ? 
+                                        backgroundSprite.url : 
+                                        "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"
+                                    }
+                            />
                             <input
+                                className="default-hidden"
                                 type="file"
                                 accept="image/*"
                                 onChange={setBackgroundSpriteFunc}
                             />
                             <p>{validation.backgroundSprite && validation.backgroundSprite}</p>
                         </label> 
+                        <button 
+                            onClick={startTemplate}
+                        >Create Campaign</button>
                     </div>
-                    <button 
-                        onClick={startTemplate}
-                    >
-                        {"->"}
-                    </button>
                 </>
             }
         </form>

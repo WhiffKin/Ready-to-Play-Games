@@ -1,0 +1,126 @@
+.create_campaign_temp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 200px;
+    
+    margin: 10px auto;
+    padding: 20px;
+    width: 1000px;
+    height: 500px;
+
+    box-shadow: 0 0 25px -15px black;
+    border-radius: 25px;
+    background-color: #dbd3de;
+
+    transform: translate(0,0);
+}
+.create_campaign_temp-container > span {
+    font-size: x-large;
+    width: 150px;
+    overflow-x: visible;
+    text-align: center;
+}
+.create_campaign_temp-container button {
+    padding: 5px;
+    width: min-content;
+    height: min-content;
+
+    border: 2px solid black;
+    border-radius: 5px;
+
+    background-color: #dbd3de;
+}
+.create_campaign_temp-container > button {
+    position: fixed;
+    bottom: 10px;
+}
+
+.create_campaign_temp-image input {
+    width: 0;
+    height: 0;
+}
+
+.create_campaign_temp-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+}
+.create_campaign_temp-form label {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    gap: 5px;
+
+    padding: 5px;
+    width: 100%;
+
+    border: 2px solid black;
+    border-radius: 5px;
+
+    color: black;
+    background-color: #dbd3de;
+    transform: translate(0,0);
+}
+.create_campaign_temp-form label span {
+    position: absolute;
+    left: 10px;
+    top: -18px;
+
+    padding: 0 3px;
+
+    color: black;
+    background-color: #dbd3de;
+}
+.create_campaign_temp-form img {
+    width: 200px;
+    height: 200px;
+    margin: 10px auto;
+}
+.create_campaign_temp-form p {
+    position: fixed;
+    font-size: small;
+    text-align: center;
+    bottom: -58px;
+    left: 0;
+
+    
+    white-space: nowrap;
+    color: rgb(255, 39, 39);
+    
+    height: 40px;
+    width: 100%;
+}
+
+.create_campaign_temp-create_template_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.create_campaign_temp-create_template-heading {
+    font-size: xx-large;
+    border-bottom: 2px solid black;
+}
+
+.create_campaign_temp-create_template-rooms {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 800px;
+    overflow-x: scroll;
+}
+.create_campaign_temp-create_template-rooms > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 5px;
+    width: 200px;
+    height: 200px;
+
+    border-radius: 10px;
+    background-color: #684e9f;
+    color: white;
+}

@@ -4,8 +4,7 @@ import { selectIndividualCampaign, thunkGetCampaignById } from "../../../redux/c
 import { useEffect } from "react";
 import CreateCampaignPage from "../CreateCampaignPage";
 
-function UpdateCampaignPage () {
-    const { campaignId } = useParams();
+function UpdateCampaignPage ({ campaignId }) {
     const dispatch = useDispatch();
     const campaign = useSelector(selectIndividualCampaign(campaignId));
 

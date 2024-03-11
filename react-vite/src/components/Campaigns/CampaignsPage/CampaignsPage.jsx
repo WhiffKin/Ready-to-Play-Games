@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { selectCampaignArray, thunkGetCampaigns } from "../../../redux/campaign";
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
 import DeleteCampaignModal from "./DeleteCampaignModal";
-import SignupFormModal from "../../SignupFormModal";
-import { useModal } from "../../../context/Modal";
+import "./CampaignsPage.css";
+import UpdateCampaignPage from "../UpdateCampaignPage/UpdateCampaignPage";
 
 function CampaignsPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(state => state.session.user);
     const campaigns = useSelector(selectCampaignArray());
-    const {setModalContent} = useModal();
 
     useEffect(() => {
         if (!user) navigate("/");
@@ -28,24 +27,30 @@ function CampaignsPage() {
     return (
         <>
             {campaigns.map(campaign => (
-                <div key={campaign.id}>
-                    <img src={campaign.sprite} alt={`${campaign.name} campaign sprite.`} />
-                    <h1>{campaign.name}</h1>
-                    <button 
-                        onClick={() => alert("Feature coming soon!")}
-                    >
-                        Start Campaign
-                    </button>
-                    <button 
-                        onClick={() => navigate(`/campaigns/${campaign.id}`)}
-                    >
-                        Edit
-                    </button>
-                    <OpenModalButton
-                        buttonText="Delete"
-                        modalComponent={<DeleteCampaignModal campaignId={campaign.id} navigate={navigate} />}
-                    />
-                    <h3>{campaign.description}</h3>
+                <div 
+                    key={campaign.id}
+                    className="campaigns_page-campaign_container"
+                >
+                    <img src={campaign.backgroundSprite} alt={`${campaign.name} campaign sprite.`} />
+                    <div>
+                        <h1>{campaign.name}</h1>
+                        <div>
+                            <button 
+                                onClick={() => alert("Feature coming soon!")}
+                            >
+                                Start Campaign
+                            </button>
+                            <OpenModalButton
+                                buttonText="Edit"
+                                modalComponent={<UpdateCampaignPage campaignId={campaign.id} />}
+                            />
+                            <OpenModalButton
+                                buttonText="Delete"
+                                modalComponent={<DeleteCampaignModal campaignId={campaign.id} navigate={navigate} />}
+                            />
+                        </div>
+                        <h3>{campaign.description}</h3>
+                    </div>
                 </div>
             ))}
         </>

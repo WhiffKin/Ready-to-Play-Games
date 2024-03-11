@@ -54,7 +54,7 @@ const SingleCampaignTemplatePage = () => {
                                 </div>)
                             }                       
                         </div>
-                        <span>{room.name}asdfasdfasdfasdfasdf</span>
+                        <span>{room.name}</span>
                     </div>
                 ))}
             </div>

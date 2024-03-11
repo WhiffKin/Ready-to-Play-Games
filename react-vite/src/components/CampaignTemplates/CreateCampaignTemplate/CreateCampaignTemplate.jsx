@@ -4,6 +4,7 @@ import CreateTemplatePage from "../CreateTemplatePage";
 import { useCampaignTemplateContext } from "../../../context/CampaignTemplate/CampaignTemplate";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import "./CreateCampaignTemplate.css"
 
 function CreateCampaignTemplate() {
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function CreateCampaignTemplate() {
 
     return (
         <div
+            className="create_campaign_temp-container"
             onMouseLeave={() => {
                 if (currentBuild == "Looking") setCurrentBuild("");
             }}
@@ -35,9 +37,11 @@ function CreateCampaignTemplate() {
             (currentBuild == "Looking" ? 
             <>
                 <span
+                    className="cursor-pointer" 
                     onClick={() => setCurrentBuild("Template")}
                 >Campaign Template</span>
                 <span
+                    className="cursor-pointer" 
                     onClick={() => setCurrentBuild("Rooms")}
                 >Rooms</span>
             </> : 
@@ -45,6 +49,10 @@ function CreateCampaignTemplate() {
             <CreateTemplatePage /> :
             <CreateRoomPage />
             ))}
+            {currentBuild && currentBuild != "Looking" &&
+            <button
+                onClick={() => setCurrentBuild("Looking")}
+            >Cancel</button>}
         </div>
     )
 }
