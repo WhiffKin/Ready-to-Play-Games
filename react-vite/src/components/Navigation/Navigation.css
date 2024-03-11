@@ -1,3 +1,52 @@
 .profile-dropdown {
   position: absolute;
+  top: 60px;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  padding: 20px;
+
+  width: 150px;
+  background-color: #5b438e;
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  padding: 0;
+  margin: 0;
+
+  z-index: 1000;
+  background-color: #684e9f;
+}
+nav > ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 1200px;
+  height: 60px;
+
+  padding: 0;
+  margin: auto;
+}
+nav > ul li {
+  list-style: none;
+  color: white;
+}
+nav > ul li > a {
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}
+nav > ul > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  /* REUIRED FOR POSITIONING DROPDOWN */
+  transform: translate(0,0);
 }

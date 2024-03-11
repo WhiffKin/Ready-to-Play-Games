@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkPostRoom } from "../../../redux/room";
 import { useCampaignTemplateContext } from "../../../context/CampaignTemplate/CampaignTemplate";
+import { isPhotoFile } from "../../../helperFuncs";
 
 function CreateRoomPage() {
     const dispatch = useDispatch();
@@ -11,7 +12,7 @@ function CreateRoomPage() {
     const [validation, setValidation] = useState({});
     const [environPieces, setEnvironPieces] = useState({});
     const [name, setName] = useState("");
-    const [backgroundSprite, setBackgroundSprite] = useState();
+    const [backgroundSprite, setBackgroundSprite] = useState({});
     const [showRoom, setShowRoom] = useState(false);
     const [canSubmit, setCanSubmit] = useState(true);
 
@@ -39,7 +40,8 @@ function CreateRoomPage() {
 
         const newValid = {};
         if (!name.length) newValid.name = "Name is required.";
-        if (!backgroundSprite) newValid.backgroundSprite = "Background Sprite is required.";
+        if (!backgroundSprite?.file) newValid.backgroundSprite = "Background Sprite is required.";
+        if (!isPhotoFile(backgroundSprite?.file?.name)) newValid.backgroundSprite = "Background sprite must be a photo."
 
         // Unsuccessful validation.
         if (Object.values(newValid).length) return setValidation(newValid);
@@ -58,12 +60,20 @@ function CreateRoomPage() {
 
     const onSubmit = async e => {
         e.preventDefault();
+        console.log("Submission")
 
         // Validation
         const newValid = {};
         if (!name.length) newValid.name = "Name is required.";
         if (!backgroundSprite) newValid.backgroundSprite = "Background Sprite is required.";
 
+        for (let key in environPieces) 
+            if (!isPhotoFile(environPieces[key].file.name)) {
+                environPieces[key] = null;
+                newValid.pieces = "One or more pieces was a bad file type, it has been removed."
+            }
+
+        console.log(newValid)
         // Unsuccessful validation.
         if (Object.values(newValid).length) return setValidation(newValid);
 
@@ -85,7 +95,6 @@ function CreateRoomPage() {
         }
 
         // Successful Submission
-        clearRoomFields();
         setReset(true);
     }
 
@@ -93,9 +102,9 @@ function CreateRoomPage() {
         <div>
             {!showRoom ? 
             <>
-                <div>
+                <div className="create_campaign_temp-form">
                     <label>
-                        Name
+                        <span>Name</span>
                         <input
                             type="text"
                             value={name}
@@ -104,104 +113,135 @@ function CreateRoomPage() {
                         <p>{validation.name && validation.name}</p>
                     </label>
                     <label>
-                        Choose a background for this room.
+                        <span>Background Image</span>
+                        <img 
+                            className="cursor-pointer"
+                            src={backgroundSprite.url ? 
+                                    backgroundSprite.url : 
+                                    "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"
+                                }
+                        />
                         <input
+                            className="default-hidden"
                             type="file"
                             accept="image/*"
                             onChange={setBackgroundSpriteFunc}
                         />
+                        <p>{validation.backgroundSprite && validation.backgroundSprite}</p>
                     </label> 
+                    <button 
+                        onClick={startRoom}
+                    >
+                        Create Room
+                    </button>
+                </div>
+            </> :
+            <form onSubmit={onSubmit}
+                id="create_room-room_form"
+            >
+                <div
+                    className="create_room-room_card"
+                >
+                    <div>
+                        <img 
+                            className="create_room-floor"
+                            src={backgroundSprite.url ? 
+                                    backgroundSprite.url : 
+                                    "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"
+                                }
+                        />
+                        <label>
+                            <img
+                                className="create_room-piece_wall"
+                                src={environPieces.wall ? environPieces.wall.url : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Wall Environment Piece" />
+                            <input
+                                className="default-hidden"
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setEnvironPieceFunc(e, "wall")}
+                            />
+                        </label>
+                        <label>
+                            <img 
+                                className="create_room-piece_back_left"
+                                src={environPieces.back_left ? environPieces.back_left.url : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Back Left Environment Piece" />
+                            <input
+                                className="default-hidden"
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setEnvironPieceFunc(e, "back_left")}
+                            />
+                        </label>
+                        <label>
+                            <img 
+                                className="create_room-piece_back_center"
+                                src={environPieces.back_center ? environPieces.back_center.url : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Back Center Environment Piece" />
+                            <input
+                                className="default-hidden"
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setEnvironPieceFunc(e, "back_center")}
+                            />
+                        </label>
+                        <label>
+                            <img 
+                                className="create_room-piece_back_right"
+                                src={environPieces.back_right ? environPieces.back_right.url : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Back Right Environment Piece" />
+                            <input
+                                className="default-hidden"
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setEnvironPieceFunc(e, "back_right")}
+                            />
+                        </label>
+                        <label>
+                            <img 
+                                className="create_room-piece_front_left"
+                                src={environPieces.front_left ? environPieces.front_left.url : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Front Left Environment Piece" />
+                            <input
+                                className="default-hidden"
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setEnvironPieceFunc(e, "front_left")}
+                            />
+                        </label>
+                        <label>
+                            <img 
+                                className="create_room-piece_front_center"
+                                src={environPieces.front_center ? environPieces.front_center.url : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Front Center Environment Piece" />
+                            <input
+                                className="default-hidden"
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setEnvironPieceFunc(e, "front_center")}
+                            />
+                        </label>
+                        <label>
+                            <img 
+                                className="create_room-piece_front_right"
+                                src={environPieces.front_right ? environPieces.front_right.url : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Front Right Environment Piece" />
+                            <input
+                                className="default-hidden"
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setEnvironPieceFunc(e, "front_right")}
+                            />
+                        </label>
+                    </div>
+                    <label>
+                        <p>{validation.pieces && validation.pieces}</p>
+                    </label>
                 </div>
                 <button 
-                    onClick={startRoom}
-                >
-                    {"->"}
-                </button>
-            </> :
-            <form onSubmit={onSubmit}>
-                <label>
-                    {environPieces.wall && 
-                        <img src={environPieces.wall.url}
-                            alt="Wall Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "wall")}
-                    />
-                </label>
-                <label>
-                    {environPieces.back_left && 
-                        <img src={environPieces.back_left.url}
-                            alt="Back Left Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "back_left")}
-                    />
-                </label>
-                <label>
-                    {environPieces.back_center && 
-                        <img src={environPieces.back_center.url}
-                            alt="Back Center Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "back_center")}
-                    />
-                </label>
-                <label>
-                    {environPieces.back_right && 
-                        <img src={environPieces.back_right.url}
-                            alt="Back Right Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "back_right")}
-                    />
-                </label>
-                <label>
-                    {environPieces.obstacle && 
-                        <img src={environPieces.obstacle.url}
-                            alt="Obstacle Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "obstacle")}
-                    />
-                </label>
-                <label>
-                    {environPieces.front_left && 
-                        <img src={environPieces.front_left.url}
-                            alt="Front Left Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "front_left")}
-                    />
-                </label>
-                <label>
-                    {environPieces.front_center && 
-                        <img src={environPieces.front_center.url}
-                            alt="Front Center Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "front_center")}
-                    />
-                </label>
-                <label>
-                    {environPieces.front_right && 
-                        <img src={environPieces.front_right.url}
-                            alt="Front Right Environment Piece" />}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={e => setEnvironPieceFunc(e, "front_right")}
-                    />
-                </label>
-                <button 
-                    type="submit" 
                     disabled={!canSubmit}
+                    type="submit" 
                 >Submit</button>
             </form>
             }

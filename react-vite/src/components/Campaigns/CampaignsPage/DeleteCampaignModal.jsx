@@ -9,7 +9,7 @@ function DeleteCampaignModal({ campaignId, navigate }) {
     const deleteCampaign = async (e) => {
         e.preventDefault();
         await dispatch(thunkDeleteCampaign(campaignId));
-        navigate(`/`);
+        navigate(`/campaigns`);
         closeModal();
     }
 

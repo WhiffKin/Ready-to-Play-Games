@@ -1,0 +1,39 @@
+.campaigns_page-campaign_container {
+    display: flex;
+    justify-content: start;
+    gap: 20px;
+    
+    padding: 20px;
+    margin: 20px;
+    width: 600px;
+    height: 250px;
+    border-radius: 20px;
+    background-color: antiquewhite;
+}
+
+.campaigns_page-campaign_container img {
+    width: 250px;
+    height: 250px;
+}
+.campaigns_page-campaign_container > div { 
+    display: flex;
+    flex-direction: column;
+}
+.campaigns_page-campaign_container > div h1 { 
+    font-size: larger;
+    padding: 10px 0;
+    width: 300px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+.campaigns_page-campaign_container > div > div {   
+    display: flex;   
+    gap: 5px;
+    padding-bottom: 10px;
+}
+.campaigns_page-campaign_container > div h3 {  
+    height: 155px;
+    overflow-y: hidden;
+    word-break: break-all;
+}

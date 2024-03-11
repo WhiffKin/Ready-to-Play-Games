@@ -6,6 +6,7 @@ import names from "./names";
 import { thunkPostCharacter, thunkUpdateCharacter } from "../../../redux/character";
 import SignupFormModal from "../../SignupFormModal";
 import { useModal } from "../../../context/Modal";
+import "./CreateCharacterPage.css";
 
 function CreateCharacterPage({ editedChar }) {
     const dispatch = useDispatch();
@@ -25,6 +26,7 @@ function CreateCharacterPage({ editedChar }) {
     const [cha, setCha] = useState(editedChar ? editedChar.charisma : 10);
     
     const [validation, setValidation] = useState({});
+    const [clearStatValid, setClearStatValid] = useState();
     const [canSubmit, setCanSubmit] = useState(true);
 
     useEffect(() => {
@@ -39,7 +41,7 @@ function CreateCharacterPage({ editedChar }) {
     }, [])
 
     useEffect(() => {
-        if (!user) setModalContent(<SignupFormModal />);
+        if (!user) navigate("/");
     })
 
     // Set new Sprite
@@ -78,32 +80,53 @@ function CreateCharacterPage({ editedChar }) {
         }
     }
 
+    const resetValidation = () => {
+        setValidation({...validation, stats: null});
+    }
+
     // Increment stats iff the total is within 40 (base level stat points)
     const incrementStats = (e, type) => {
         const val = e.target.value;
-        if (val > 20 || val < 0) return;
+        if (val < 0) return;
         
-        let max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
+        const max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
         let total = str + dex + wis + cha;
         switch(type) {
             case "str":
                 total += val - str;
-                if (total <= max) return setStr(parseInt(val));
+                if (total <= max) setStr(val ? parseInt(val) : 0);
                 break;
             case "dex":
                 total += val - dex;
-                if (total <= max) return setDex(parseInt(val));
+                if (total <= max) setDex(val ? parseInt(val) : 0);
                 break;
             case "wis":
                 total += val - wis;
-                if (total <= max) return setWis(parseInt(val));
+                if (total <= max) setWis(val ? parseInt(val) : 0);
                 break;
             case "cha":
                 total += val - cha;
-                if (total <= max) return setCha(parseInt(val));
+                if (total <= max) setCha(val ? parseInt(val) : 0);
                 break;
         }
-        return setValidation({...validation, stats: "Stats are maxxed out"});
+
+        if (total <= max) return resetValidation();
+
+        if (clearStatValid) clearTimeout(clearStatValid);
+        setClearStatValid(setTimeout(resetValidation, 2000));
+        return setValidation({...validation, stats: "Stats are maxxed out."});
+    }
+
+    const randomizeStats = () => {
+        const newStats = [0,0,0,0];
+        const max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
+        for (let i = 0; i < max; i++)
+            newStats[Math.floor(Math.random() * 4)]++;
+
+        setStr(newStats[0]);
+        setDex(newStats[1]);
+        setWis(newStats[2]);
+        setCha(newStats[3]);
     }
 
     // Sets all fields to a random value
@@ -125,14 +148,7 @@ function CreateCharacterPage({ editedChar }) {
             "Sorcerer"]
         ));
 
-        const newStats = [0,0,0,0];
-        for (let i = 0; i < 40; i++)
-            newStats[Math.floor(Math.random() * 4)]++;
-
-        setStr(newStats[0]);
-        setDex(newStats[1]);
-        setWis(newStats[2]);
-        setCha(newStats[3]);
+        randomizeStats();
     }
 
     // Form submission
@@ -142,8 +158,10 @@ function CreateCharacterPage({ editedChar }) {
 
         // Validations
         const newValid = {};
-        if (name.length < 2) newValid.name = "Name must have a minimum length of 2."
-        if (str + dex + wis + cha < 40) newValid.stats = "There are still remaining stat points."
+        if (name.length < 2) newValid.name = "Name must have a minimum length of 2.";
+        if (name.length > 40) newValid.name = "Name must have a maximum length of 40.";
+        const max = 40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0)
+        if (str + dex + wis + cha < max) newValid.stats = "There are still remaining stat points.";
 
         // Unsuccessful validation
         if (Object.values(newValid).length) {
@@ -180,9 +198,9 @@ function CreateCharacterPage({ editedChar }) {
 
     return (
         <>
-            <div> 
-                <label>
-                    <img src={sprite} alt="Character sprite preview"/>
+            <div className="create_character-container"> 
+                <label className="create_character-image">
+                    <img src={sprite} alt="Character sprite preview" className="cursor-pointer"/>
                     <input
                         type="file"
                         accept="image/*"
@@ -192,10 +210,11 @@ function CreateCharacterPage({ editedChar }) {
                 <form 
                     onSubmit={onSubmit}
                     encType="multipart/form-data"
+                    className="create_character-form"
                 >
                     <h3>Character Details:</h3>
                     <label>
-                        Name
+                        <span>Name</span>
                         <input
                             placeholder=""
                             value={name}
@@ -205,7 +224,7 @@ function CreateCharacterPage({ editedChar }) {
                         <p>{validation.name && validation.name}</p>
                     </label>
                     <label>
-                        Alignment
+                        <span>Alignment</span>
                         <select
                             type="select"
                             value={alignment}
@@ -221,7 +240,7 @@ function CreateCharacterPage({ editedChar }) {
                         <p>{validation.alignment && validation.alignment}</p>
                     </label>
                     <label>
-                        Class
+                        <span>Class</span>
                         <select
                             type="select"
                             value={charClass}
@@ -234,50 +253,61 @@ function CreateCharacterPage({ editedChar }) {
                         </select>
                         <p>{validation.classType && validation.classType}</p>
                     </label>
-                    <label>
-                        Description
+                    <label id="create_character-form-description">
+                        <span>Description</span>
                         <textarea
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                         ></textarea>
                     </label>
                     <h3>Character Stats:</h3>
-                    <label>
-                        Strength
-                        <input
-                            type="number"
-                            value={str}
-                            onChange={e => incrementStats(e, "str")}
-                        ></input>
+                    <div className="create_character-form-stats">
+                        <label>
+                            Strength
+                            <input
+                                type="number"
+                                value={str}
+                                onChange={e => incrementStats(e, "str")}
+                                onKeyDown={"return false"}
+                            ></input>
+                        </label>
+                        <label>
+                            Dexterity
+                            <input
+                                type="number"
+                                value={dex}
+                                onChange={e => incrementStats(e, "dex")}
+                            ></input>
+                        </label>
+                        <label>
+                            Wisdom
+                            <input
+                                type="number"
+                                value={wis}
+                                onChange={e => incrementStats(e, "wis")}
+                            ></input>
+                        </label>
+                        <label>
+                            Charisma
+                            <input
+                                type="number"
+                                value={cha}
+                                onChange={e => incrementStats(e, "cha")}
+                            ></input>
+                        </label>
+                    </div>
+                    <label id="create_character-stats-remaining">
+                        <p>{validation.stats && validation.stats}</p>
+                        <h5>Stat points left: {40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0) - str - wis - dex - cha}</h5>
                     </label>
-                    <label>
-                        Dexterity
-                        <input
-                            type="number"
-                            value={dex}
-                            onChange={e => incrementStats(e, "dex")}
-                        ></input>
-                    </label>
-                    <label>
-                        Wisdom
-                        <input
-                            type="number"
-                            value={wis}
-                            onChange={e => incrementStats(e, "wis")}
-                        ></input>
-                    </label>
-                    <label>
-                        Charisma
-                        <input
-                            type="number"
-                            value={cha}
-                            onChange={e => incrementStats(e, "cha")}
-                        ></input>
-                    </label>
-                    <h5>Stat points left: {40 + (editedChar ? Math.floor(Math.sqrt(editedChar.experience / 2)) : 0) - str - wis - dex - cha}</h5>
-                    <div>
+                    <div id="create_character-button_container" >
                         <button onClick={randomize}>Randomize</button>
                         <button type="submit" disabled={!canSubmit}>Submit</button>
+                        {editedChar && 
+                        <button onClick={e => {
+                            e.preventDefault();
+                            navigate(`/characters/${editedChar.id}`)
+                        }}>Cancel</button>}
                     </div>
                 </form>
             </div>
