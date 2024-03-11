@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectCharArray, thunkGetCharacters } from "../../../redux/character";
+import "./CharactersPage.css";
 
 function CharactersPage() {
     const dispatch = useDispatch();
@@ -16,10 +17,14 @@ function CharactersPage() {
     return (
         <>
             {characters.map(character => (
-                <div key={character.id} onClick={() => navigate(`/characters/${character.id}`)}>
+                <div 
+                    key={character.id} 
+                    className="character_page-container cursor-pointer" 
+                    onClick={() => navigate(`/characters/${character.id}`)}
+                >
                     <img src={character.sprite} alt={`${character.name} character sprite.`} />
-                    <span>{character.name}</span>
-                    <span>{character.classType}</span>
+                    <h3>{character.name}</h3>
+                    <h5>{character.classType}</h5>
                 </div>
             ))}
         </>

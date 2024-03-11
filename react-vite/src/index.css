@@ -1,1 +1,41 @@
 /* TODO: Add sitewide styles */
+
+* {
+    font-family: "Eagle Lake", serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+button, a {
+    cursor: pointer;
+}
+
+img {
+    image-rendering: pixelated;
+}
+
+input, h1, h2, h3, h4, h5, h6 {
+    all: unset;
+}
+
+div, span, p, h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.default-image {
+    background: linear-gradient(128deg, rgba(204,40,200,1) 14%, rgba(40,153,204,1) 89%);
+}
+
+.default-hidden {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+}

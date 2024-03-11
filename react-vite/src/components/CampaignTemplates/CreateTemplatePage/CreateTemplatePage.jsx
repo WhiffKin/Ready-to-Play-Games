@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectRoomArray, thunkGetRooms } from "../../../redux/room";
 import { useNavigate } from "react-router-dom";
 import { thunkPostTemplate } from "../../../redux/campaignTemplate";
+import { isPhotoFile } from "../../../helperFuncs";
 
 function CreateTemplatePage() {
     const dispatch = useDispatch();
@@ -13,7 +14,7 @@ function CreateTemplatePage() {
     const [canSubmit, setCanSubmit] = useState(true);
     const [showTemplate, setShowTemplate] = useState(false);
     const [name, setName] = useState("");
-    const [backgroundSprite, setBackgroundSprite] = useState();
+    const [backgroundSprite, setBackgroundSprite] = useState({});
     const [allRooms, setAllRooms] = useState([]);
     const [newRoom, setNewRoom] = useState(false);
     const [skillChecks, setSkillChecks] = useState({});
@@ -47,7 +48,8 @@ function CreateTemplatePage() {
 
         const newValid = {};
         if (!name.length) newValid.name = "Name is required.";
-        if (!backgroundSprite) newValid.backgroundSprite = "Background Sprite is required.";
+        if (!backgroundSprite?.file) newValid.backgroundSprite = "Background Sprite is required.";
+        if (!isPhotoFile(backgroundSprite?.file?.name)) newValid.backgroundSprite = "Background sprite must be a photo."
 
         // Unsuccessful validation.
         if (Object.values(newValid).length) return setValidation(newValid);
@@ -65,11 +67,13 @@ function CreateTemplatePage() {
         setValidation({});
     }
 
-    function addRoom() {
+    function addRoom(e) {
+        e.preventDefault();
+
         // Validations
         const tempValid = {};
         if (typeof newRoom == "boolean") tempValid.room = "A room must be selected.";
-        if (!Object.values(skillChecks).length) tempValid.check = "There must be a skill check or an enemy.";
+        if (!Object.values(skillChecks).length) tempValid.check = "There must be a skill check.";
         if (Object.values(skillChecks).find(value => value == "Working on it.")) tempValid.check = "Finish changes before submission.";
 
         // Unsuccessful Validation
@@ -119,153 +123,174 @@ function CreateTemplatePage() {
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form 
+            onSubmit={onSubmit}
+            className="create_campaign_temp-create_template_form"
+        >
             {showTemplate ? 
             <>
-                <h1>{name}</h1>
-                {allRooms.map((roomData, index) => {
-                    const roomId = roomData.split(";")[0];
-                    const skillChecks = roomData.split(";")[1].split("-")
-                    const room = rooms.find(room => room.id == roomId);
-                    return (
-                        <div key={index}>
-                            <h1>{room.name}</h1>
-                            <h3>Skill Check{skillChecks.length > 1 && "s"}:</h3>
-                            {skillChecks.map(check => {
-                                check = check.split(":");
-                                switch(check[0]) {
-                                    case "s":
-                                        return <span key={check[0]}>Strength: {check[1]}</span>
-                                    case "w":
-                                        return <span key={check[0]}>Wisdom: {check[1]}</span>
-                                    case "c":
-                                        return <span key={check[0]}>Charisma: {check[1]}</span>
-                                    case "d":
-                                        return <span key={check[0]}>Dexterity: {check[1]}</span>
-                                }
-                            })}
-                        </div>
-                    )
-                })}
-                {newRoom ? 
-                <>
-                    <label>
-                        Select a room
-                        <select
-                            type="select"
-                            value={newRoom}
-                            onChange={e => setNewRoom(e.target.value)}
-                        >
-                            {rooms.map(room => <option key={room.id} value={room.id}>{room.name}</option>)}
-                        </select>
-                        <p>{validation.room}</p>
-                    </label>
-                    <h3>Skill Check:</h3>
-                    <p>{validation.check}</p>
-                    <div>
-                        { !skillChecks.s ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "s")}
-                        >
-                            Strength
-                        </button> :
-                        (skillChecks.s == "Working on it." ?
-                        <>
-                            <h3>Strength:</h3>
-                            <input
-                                type="number"
-                                value={strength}
-                                onChange={e => setStrength(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "s", strength)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "s")}
-                        >Strength: {skillChecks.s}</h1>
-                        )}
-                        { !skillChecks.w ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "w")}
-                        >
-                            Wisdom
-                        </button> :
-                        (skillChecks.w == "Working on it." ?
-                        <>
-                            <h3>Wisdom:</h3>
-                            <input
-                                type="number"
-                                value={wisdom}
-                                onChange={e => setWisdom(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "w", wisdom)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "w")}
-                        >Wisdom: {skillChecks.w}</h1>
-                        )}
-                        { !skillChecks.d ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "d")}
-                        >
-                            Dexterity
-                        </button> :
-                        (skillChecks.d == "Working on it." ?
-                        <>
-                            <h3>Dexterity:</h3>
-                            <input
-                                type="number"
-                                value={dexterity}
-                                onChange={e => setDexterity(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "d", dexterity)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "d")}
-                        >Dexterity: {skillChecks.d}</h1>
-                        )}
-                        { !skillChecks.c ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "c")}
-                        >
-                            Charisma
-                        </button> :
-                        (skillChecks.c == "Working on it." ?
-                        <>
-                            <h3>Charisma:</h3>
-                            <input
-                                type="number"
-                                value={charisma}
-                                onChange={e => setCharisma(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "c", charisma)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "c")}
-                        >Charisma: {skillChecks.c}</h1>
-                        )}
-                    </div>
-                    <button
-                        onClick={addRoom}
-                    >Add room.</button>
-                    <button
-                        onClick={clearRoomForm}
-                    >Cancel.</button>
-                </>:
-                <>
-                    <div onClick={() => setNewRoom(rooms[0].id)}>
-                        Add a room?
-                    </div>
-                    {!!allRooms.length  && 
-                        <button
-                            disabled={!canSubmit}
-                        >Create Template</button>}
-                </>} 
-            </> :
-                <>
+                <h1
+                    className="create_campaign_temp-create_template-heading"
+                >{name}</h1>
+                <div
+                    className="create_campaign_temp-create_template-rooms"
+                >
+                    {allRooms.map((roomData, index) => {
+                        const roomId = roomData.split(";")[0];
+                        const skillChecks = roomData.split(";")[1].split("-")
+                        const room = rooms.find(room => room.id == roomId);
+                        return (
+                            <div key={index}>
+                                <h1>{room.name}</h1>
+                                <h3>Skill Check{skillChecks.length > 1 && "s"}:</h3>
+                                {skillChecks.map(check => {
+                                    check = check.split(":");
+                                    switch(check[0]) {
+                                        case "s":
+                                            return <span key={check[0]}>Strength: {check[1]}</span>
+                                        case "w":
+                                            return <span key={check[0]}>Wisdom: {check[1]}</span>
+                                        case "c":
+                                            return <span key={check[0]}>Charisma: {check[1]}</span>
+                                        case "d":
+                                            return <span key={check[0]}>Dexterity: {check[1]}</span>
+                                    }
+                                })}
+                            </div>
+                        )
+                    })}
+                    
+                    {newRoom ? 
                     <div>
                         <label>
-                            Name
+                            <span>Select a Room</span>
+                            <select
+                                type="select"
+                                value={newRoom}
+                                onChange={e => setNewRoom(e.target.value)}
+                            >
+                                {rooms.map(room => <option key={room.id} value={room.id}>{room.name}</option>)}
+                            </select>
+                            <p>{validation.room}</p>
+                        </label>
+                        <h3>Skill Checks:</h3>
+                        <label>
+                            <p>{validation.check}</p>
+                        </label>
+                        <div>
+                            { !skillChecks.s ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "s")}
+                            >
+                                Strength
+                            </button> :
+                            (skillChecks.s == "Working on it." ?
+                            <label>
+                                <span>Strength:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={strength}
+                                    onChange={e => setStrength(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "s", strength)} >+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "s")}
+                            >Strength: {skillChecks.s}</h1>
+                            )}
+                            { !skillChecks.w ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "w")}
+                            >
+                                Wisdom
+                            </button> :
+                            (skillChecks.w == "Working on it." ?
+                            <label>
+                                <span>Wisdom:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={wisdom}
+                                    onChange={e => setWisdom(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "w", wisdom)} >+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "w")}
+                            >Wisdom: {skillChecks.w}</h1>
+                            )}
+                            { !skillChecks.d ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "d")}
+                            >
+                                Dexterity
+                            </button> :
+                            (skillChecks.d == "Working on it." ?
+                            <label>
+                                <span>Dexterity:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={dexterity}
+                                    onChange={e => setDexterity(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "d", dexterity)} >+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "d")}
+                            >Dexterity: {skillChecks.d}</h1>
+                            )}
+                            { !skillChecks.c ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "c")}
+                            >
+                                Charisma
+                            </button> :
+                            (skillChecks.c == "Working on it." ?
+                            <label>
+                                <span>Charisma:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={charisma}
+                                    onChange={e => setCharisma(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "c", charisma)}>+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "c")}
+                            >Charisma: {skillChecks.c}</h1>
+                            )}
+                        </div>
+                        <div 
+                            id="create_campaign_temp-create_template-submit_room"
+                        >
+                            <button
+                                onClick={addRoom}
+                            >Add room.</button>
+                            <button
+                                onClick={clearRoomForm}
+                            >Cancel.</button>
+                        </div>
+                    </div>:
+                    <>
+                        <div onClick={() => setNewRoom(rooms[0].id)}>
+                            Add a room?
+                        </div>
+                    </>} 
+                </div>
+                {!!allRooms.length  && 
+                    <button
+                        disabled={!canSubmit}
+                    >Create Template</button>}
+            </> :
+                <>
+                    <div className="create_campaign_temp-form">
+                        <label>
+                            <span>Name</span>
                             <input
+                                id
                                 type="text"
                                 value={name}
                                 onChange={e => setName(e.target.value)}
@@ -273,20 +298,26 @@ function CreateTemplatePage() {
                             <p>{validation.name && validation.name}</p>
                         </label>
                         <label>
-                            Choose a background for this template.
+                            <span>Background Image</span>
+                            <img 
+                                className="cursor-pointer"
+                                src={backgroundSprite.url ? 
+                                        backgroundSprite.url : 
+                                        "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"
+                                    }
+                            />
                             <input
+                                className="default-hidden"
                                 type="file"
                                 accept="image/*"
                                 onChange={setBackgroundSpriteFunc}
                             />
                             <p>{validation.backgroundSprite && validation.backgroundSprite}</p>
                         </label> 
+                        <button 
+                            onClick={startTemplate}
+                        >Create Campaign</button>
                     </div>
-                    <button 
-                        onClick={startTemplate}
-                    >
-                        {"->"}
-                    </button>
                 </>
             }
         </form>

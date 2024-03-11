@@ -1,0 +1,125 @@
+.campaign_template{
+    margin: auto;
+    width: 1000px;
+
+}
+
+.campaign_template-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: starts;
+
+    margin: 10px 0;
+    padding: 10px;
+    height: 410px;
+    width: 100%;
+    border-radius: 10px;
+
+    background-color: #dbd3de;
+}
+.campaign_template-header img {
+    height: 365px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.campaign_template-header > div {
+    display: flex;
+    gap: 20px;
+}
+.campaign_template-header h1 {
+    font-size: x-large;
+    white-space: nowrap;
+    margin: 5px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.campaign_template-room_container {
+    display: flex;
+    justify-content: start;
+
+    overflow-x: scroll;
+    height: max-content;
+}
+
+.campaign_template-room_card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    
+    margin: auto;
+    width: 250px;
+    height: 250px;
+    transform: translate(0,0);
+}
+.campaign_template-room_card div {
+    width: 250px;
+    height: 250px;
+}
+.campaign_template-room_card * {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.campaign_template-room_card span {
+    top: 180px;
+    margin: auto;
+    width: 240px;
+    height: 60px;
+    
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.campaign_template-room-floor {
+    transform: perspective(250px) translate3d(0, 0, 0) rotateX(60deg);
+    z-index: 0;
+    
+    width: 170px;
+    height: 170px;
+
+    background-repeat: repeat;
+}
+.campaign_template-room-wall {
+    transform: perspective(250px) translate3d(0, -92.5px, -73.61px);
+    z-index: -5;
+    width: 170px;
+    height: 100px;
+}
+.campaign_template-room-back_left,
+.campaign_template-room-back_center,
+.campaign_template-room-back_right {
+    z-index: 5;
+    width: 40px;
+    height: 50px;
+}
+.campaign_template-room-front_left,
+.campaign_template-room-front_center,
+.campaign_template-room-front_right {
+    z-index: 10;
+    width: 40px;
+    height: 50px;
+}
+.campaign_template-room-back_left {
+    transform: perspective(250px) translate3d(-42.5px, -46.25px, -36.805px);
+}
+.campaign_template-room-back_center {
+    transform: perspective(250px) translate3d(0, -46.25px, -36.805px);
+}
+.campaign_template-room-back_right {
+    transform: perspective(250px) translate3d(42.5px, -46.25px, -36.805px);
+}
+.campaign_template-room-front_left {
+    transform: perspective(250px) translate3d(-42.5px, 3.75px, 36.805px);
+}
+.campaign_template-room-front_center {
+    transform: perspective(250px) translate3d(0, 3.75px, 36.805px);
+}
+.campaign_template-room-front_right {
+    transform: perspective(250px) translate3d(42.5px, 3.75px, 36.805px);
+}

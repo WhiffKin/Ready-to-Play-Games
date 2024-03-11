@@ -25,6 +25,6 @@ class Campaign(db.Model):
         return {
             'id': self.id,
             'name': self.name.rsplit(",")[1],
-            'background_sprite': self.background_sprite,
+            'backgroundSprite': self.background_sprite,
             'description': self.description,
         }

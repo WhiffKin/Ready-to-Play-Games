@@ -80,10 +80,6 @@ export const router = createBrowserRouter([
         path: "campaigns",
         element: <CampaignsPage />
       },
-      {
-        path: "campaigns/:campaignId",
-        element: <UpdateCampaignPage />
-      },
     ],
   },
 ]);

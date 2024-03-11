@@ -3,11 +3,11 @@ from enum import Enum
 
 class Location(Enum):
     front_left = "front_left"
-    front_center = "front_left"
-    front_right = "front_left"
+    front_center = "front_center"
+    front_right = "front_right"
     back_left = "back_left"
-    back_center = "back_left"
-    back_right = "back_left"
+    back_center = "back_center"
+    back_right = "back_right"
     obstacle = "obstacle"
     wall = "wall"
 

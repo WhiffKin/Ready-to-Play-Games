@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 import SignupFormModal from "../../SignupFormModal";
 import { useModal } from "../../../context/Modal";
 import { thunkPostCampaign, thunkUpdateCampaign } from "../../../redux/campaign";
+import "./CreateCampaignPage.css";
 
 function CreateCharacterPage({ editedCampaign, template }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { setModalContent } = useModal();
+    const { closeModal } = useModal();
     const user = useSelector(state => state.session.user);
 
     const [custSprite, setCustSprite] = useState();
-    const [sprite, setSprite] = useState(editedCampaign ? editedCampaign.sprite : "");    
+    const [sprite, setSprite] = useState(editedCampaign ? editedCampaign.backgroundSprite : "");    
     const [name, setName] = useState(editedCampaign ? editedCampaign.name : "");
     const [description, setDescription] = useState(editedCampaign ? editedCampaign.description : "");
     
@@ -20,7 +21,7 @@ function CreateCharacterPage({ editedCampaign, template }) {
     const [canSubmit, setCanSubmit] = useState(true);
 
     useEffect(() => {
-        if (!user) setModalContent(<SignupFormModal />);
+        if (!user) navigate("/");
     })
 
     // Set new Sprite
@@ -40,7 +41,7 @@ function CreateCharacterPage({ editedCampaign, template }) {
         // Validations
         const newValid = {};
         if (name.length < 2) newValid.name = "Name must have a minimum length of 2."
-        if (description.length < 10) newValid.description = "Description must be at least ten characters."
+        if (description.length < 10) newValid.description = "Description must be 10+ characters."
 
         // Unsuccessful validation
         if (Object.values(newValid).length) {
@@ -69,25 +70,37 @@ function CreateCharacterPage({ editedCampaign, template }) {
 
         // Successful Submission
         navigate(`/campaigns`);
+        closeModal();
     }
 
     return (
         <>
             <div> 
                 <form 
+                    className="create_campaign-container"
                     onSubmit={onSubmit}
                     encType="multipart/form-data"
                 >
-                    <label>
-                        <img src={sprite} alt="Character sprite preview"/>
+                    <label 
+                        id="create_campaign-image"
+                        className="create_campaign-image cursor-pointer"
+                    >
+                        <span>Background Image</span>
+                        <div>
+                            <img 
+                                src={sprite ? sprite : "https://whiffkin-rtpg.s3.us-west-2.amazonaws.com/add+photo.png"}
+                                alt="Campaign preview image"
+                            />
+                        </div>
                         <input
+                            id="create_campaign-hidden_input"
                             type="file"
                             accept="image/*"
                             onChange={onImageChange}
                         />
                     </label>
                     <label>
-                        Name
+                        <span>Name</span>
                         <input
                             placeholder=""
                             value={name}
@@ -96,7 +109,7 @@ function CreateCharacterPage({ editedCampaign, template }) {
                         <p>{validation.name && validation.name}</p>
                     </label>
                     <label>
-                        Description
+                        <span>Description</span>
                         <input
                             placeholder=""
                             value={description}
