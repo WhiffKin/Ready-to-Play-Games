@@ -65,7 +65,10 @@ function LoginFormModal() {
           <p>{errors.password && errors.password} </p>
         </label>
         <button type="submit">Log In</button>
-        <div onClick={loginDemo}>Click me for a demo user!</div>
+        <div 
+          className="cursor-pointer"
+          onClick={loginDemo}
+        >Click me for a demo user!</div>
       </form>
     </>
   );
