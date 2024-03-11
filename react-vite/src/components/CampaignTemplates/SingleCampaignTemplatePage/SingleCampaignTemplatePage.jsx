@@ -42,16 +42,11 @@ const SingleCampaignTemplatePage = () => {
                                 className={`campaign_template-room-floor`}
                             />
                             {room.pieces.map(piece => 
-                                <div key={piece.id}>
-                                    <img 
-                                        src={piece.sprite}
-                                        className={`campaign_template-room-${piece.location}`}
-                                    />
-                                    <img 
-                                        src={piece.sprite}
-                                        className={`campaign_template-room-${piece.location}`}
-                                    />
-                                </div>)
+                                <img 
+                                    key={piece.id}
+                                    src={piece.sprite}
+                                    className={`campaign_template-room-${piece.location}`}
+                                />)
                             }                       
                         </div>
                         <span>{room.name}</span>

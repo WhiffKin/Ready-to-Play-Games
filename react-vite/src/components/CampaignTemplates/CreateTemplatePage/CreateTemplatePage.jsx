@@ -67,11 +67,13 @@ function CreateTemplatePage() {
         setValidation({});
     }
 
-    function addRoom() {
+    function addRoom(e) {
+        e.preventDefault();
+
         // Validations
         const tempValid = {};
         if (typeof newRoom == "boolean") tempValid.room = "A room must be selected.";
-        if (!Object.values(skillChecks).length) tempValid.check = "There must be a skill check or an enemy.";
+        if (!Object.values(skillChecks).length) tempValid.check = "There must be a skill check.";
         if (Object.values(skillChecks).find(value => value == "Working on it.")) tempValid.check = "Finish changes before submission.";
 
         // Unsuccessful Validation
@@ -157,120 +159,131 @@ function CreateTemplatePage() {
                             </div>
                         )
                     })}
-                </div>
-                {newRoom ? 
-                <>
-                    <label>
-                        Select a room
-                        <select
-                            type="select"
-                            value={newRoom}
-                            onChange={e => setNewRoom(e.target.value)}
-                        >
-                            {rooms.map(room => <option key={room.id} value={room.id}>{room.name}</option>)}
-                        </select>
-                        <p>{validation.room}</p>
-                    </label>
-                    <h3>Skill Check:</h3>
-                    <p>{validation.check}</p>
+                    
+                    {newRoom ? 
                     <div>
-                        { !skillChecks.s ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "s")}
+                        <label>
+                            <span>Select a Room</span>
+                            <select
+                                type="select"
+                                value={newRoom}
+                                onChange={e => setNewRoom(e.target.value)}
+                            >
+                                {rooms.map(room => <option key={room.id} value={room.id}>{room.name}</option>)}
+                            </select>
+                            <p>{validation.room}</p>
+                        </label>
+                        <h3>Skill Checks:</h3>
+                        <label>
+                            <p>{validation.check}</p>
+                        </label>
+                        <div>
+                            { !skillChecks.s ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "s")}
+                            >
+                                Strength
+                            </button> :
+                            (skillChecks.s == "Working on it." ?
+                            <label>
+                                <span>Strength:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={strength}
+                                    onChange={e => setStrength(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "s", strength)} >+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "s")}
+                            >Strength: {skillChecks.s}</h1>
+                            )}
+                            { !skillChecks.w ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "w")}
+                            >
+                                Wisdom
+                            </button> :
+                            (skillChecks.w == "Working on it." ?
+                            <label>
+                                <span>Wisdom:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={wisdom}
+                                    onChange={e => setWisdom(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "w", wisdom)} >+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "w")}
+                            >Wisdom: {skillChecks.w}</h1>
+                            )}
+                            { !skillChecks.d ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "d")}
+                            >
+                                Dexterity
+                            </button> :
+                            (skillChecks.d == "Working on it." ?
+                            <label>
+                                <span>Dexterity:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={dexterity}
+                                    onChange={e => setDexterity(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "d", dexterity)} >+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "d")}
+                            >Dexterity: {skillChecks.d}</h1>
+                            )}
+                            { !skillChecks.c ? 
+                            <button 
+                                onClick={e => setSkillCheckFunc(e, "c")}
+                            >
+                                Charisma
+                            </button> :
+                            (skillChecks.c == "Working on it." ?
+                            <label>
+                                <span>Charisma:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={charisma}
+                                    onChange={e => setCharisma(e.target.value)}
+                                />
+                                <button onClick={e => setSkillCheckFunc(e, "c", charisma)}>+</button>
+                            </label> :
+                            <h1
+                                onClick={e => setSkillCheckFunc(e, "c")}
+                            >Charisma: {skillChecks.c}</h1>
+                            )}
+                        </div>
+                        <div 
+                            id="create_campaign_temp-create_template-submit_room"
                         >
-                            Strength
-                        </button> :
-                        (skillChecks.s == "Working on it." ?
-                        <>
-                            <h3>Strength:</h3>
-                            <input
-                                type="number"
-                                value={strength}
-                                onChange={e => setStrength(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "s", strength)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "s")}
-                        >Strength: {skillChecks.s}</h1>
-                        )}
-                        { !skillChecks.w ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "w")}
-                        >
-                            Wisdom
-                        </button> :
-                        (skillChecks.w == "Working on it." ?
-                        <>
-                            <h3>Wisdom:</h3>
-                            <input
-                                type="number"
-                                value={wisdom}
-                                onChange={e => setWisdom(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "w", wisdom)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "w")}
-                        >Wisdom: {skillChecks.w}</h1>
-                        )}
-                        { !skillChecks.d ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "d")}
-                        >
-                            Dexterity
-                        </button> :
-                        (skillChecks.d == "Working on it." ?
-                        <>
-                            <h3>Dexterity:</h3>
-                            <input
-                                type="number"
-                                value={dexterity}
-                                onChange={e => setDexterity(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "d", dexterity)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "d")}
-                        >Dexterity: {skillChecks.d}</h1>
-                        )}
-                        { !skillChecks.c ? 
-                        <button 
-                            onClick={e => setSkillCheckFunc(e, "c")}
-                        >
-                            Charisma
-                        </button> :
-                        (skillChecks.c == "Working on it." ?
-                        <>
-                            <h3>Charisma:</h3>
-                            <input
-                                type="number"
-                                value={charisma}
-                                onChange={e => setCharisma(e.target.value)}
-                            />
-                            <button onClick={e => setSkillCheckFunc(e, "c", charisma)} />
-                        </> :
-                        <h1
-                            onClick={e => setSkillCheckFunc(e, "c")}
-                        >Charisma: {skillChecks.c}</h1>
-                        )}
-                    </div>
+                            <button
+                                onClick={addRoom}
+                            >Add room.</button>
+                            <button
+                                onClick={clearRoomForm}
+                            >Cancel.</button>
+                        </div>
+                    </div>:
+                    <>
+                        <div onClick={() => setNewRoom(rooms[0].id)}>
+                            Add a room?
+                        </div>
+                    </>} 
+                </div>
+                {!!allRooms.length  && 
                     <button
-                        onClick={addRoom}
-                    >Add room.</button>
-                    <button
-                        onClick={clearRoomForm}
-                    >Cancel.</button>
-                </>:
-                <>
-                    <div onClick={() => setNewRoom(rooms[0].id)}>
-                        Add a room?
-                    </div>
-                    {!!allRooms.length  && 
-                        <button
-                            disabled={!canSubmit}
-                        >Create Template</button>}
-                </>} 
+                        disabled={!canSubmit}
+                    >Create Template</button>}
             </> :
                 <>
                     <div className="create_campaign_temp-form">

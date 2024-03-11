@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { selectCampaignArray, thunkGetCampaigns } from "../../../redux/campaign";
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
 import DeleteCampaignModal from "./DeleteCampaignModal";
@@ -12,18 +12,25 @@ function CampaignsPage() {
     const navigate = useNavigate();
     const user = useSelector(state => state.session.user);
     const campaigns = useSelector(selectCampaignArray());
+    const [didFind, setDidFind] = useState(true);
 
     useEffect(() => {
         if (!user) navigate("/");
     })
 
     useEffect(() => {
-        dispatch(thunkGetCampaigns());
+        checkForCampaigns();
     }, [user])
+
+    async function checkForCampaigns() {
+        const res = await dispatch(thunkGetCampaigns());
+        console.log(res)
+        if (!res.campaigns.length) setDidFind(false);
+    }
 
     console.log(campaigns)
 
-    if (!campaigns.length) return <h1>Loading Campaigns...</h1>
+    if (!didFind) return <h1>No campaigns, try <NavLink to="/templates">starting a campaign!</NavLink></h1>
     return (
         <>
             {campaigns.map(campaign => (

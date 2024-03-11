@@ -41,7 +41,7 @@ function CreateCharacterPage({ editedCampaign, template }) {
         // Validations
         const newValid = {};
         if (name.length < 2) newValid.name = "Name must have a minimum length of 2."
-        if (description.length < 10) newValid.description = "Description must be at least ten characters."
+        if (description.length < 10) newValid.description = "Description must be 10+ characters."
 
         // Unsuccessful validation
         if (Object.values(newValid).length) {

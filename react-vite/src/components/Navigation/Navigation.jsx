@@ -11,9 +11,6 @@ function Navigation() {
         </li>
         <div>
           <li>
-            <NavLink to="/users">Users</NavLink>
-          </li>
-          <li>
             <NavLink to="/characters">Characters</NavLink>
           </li>
           <li>

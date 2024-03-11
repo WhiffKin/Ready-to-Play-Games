@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import { selectIndividualCampaign, thunkGetCampaignById } from "../../../redux/campaign";
 import { useEffect } from "react";
 import CreateCampaignPage from "../CreateCampaignPage";

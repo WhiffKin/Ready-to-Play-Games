@@ -32,7 +32,8 @@ function CreateCampaignTemplate() {
         >
             {!currentBuild ? 
             <span
-                onMouseEnter={() => setCurrentBuild("Looking")}
+                onClick={() => setCurrentBuild("Looking")}
+                className="cursor-pointer" 
             >Create A Campaign</span> :
             (currentBuild == "Looking" ? 
             <>

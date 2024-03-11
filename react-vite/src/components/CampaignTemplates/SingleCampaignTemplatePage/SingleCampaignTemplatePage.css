@@ -12,7 +12,7 @@
 
     margin: 10px 0;
     padding: 10px;
-    height: 400px;
+    height: 410px;
     width: 100%;
     border-radius: 10px;
 
@@ -24,20 +24,21 @@
     object-fit: cover;
     border-radius: 10px;
 }
-.campaign_template-header div {
+.campaign_template-header > div {
     display: flex;
     gap: 20px;
 }
 .campaign_template-header h1 {
     font-size: x-large;
     white-space: nowrap;
+    margin: 5px;
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
 
 .campaign_template-room_container {
     display: flex;
-    justify-content: center;
+    justify-content: start;
 
     overflow-x: scroll;
     height: max-content;
@@ -47,7 +48,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
     
+    margin: auto;
     width: 250px;
     height: 250px;
     transform: translate(0,0);
@@ -84,14 +87,14 @@
 }
 .campaign_template-room-wall {
     transform: perspective(250px) translate3d(0, -92.5px, -73.61px);
-    z-index: 5;
+    z-index: -5;
     width: 170px;
     height: 100px;
 }
 .campaign_template-room-back_left,
 .campaign_template-room-back_center,
 .campaign_template-room-back_right {
-    z-index: 7;
+    z-index: 5;
     width: 40px;
     height: 50px;
 }
