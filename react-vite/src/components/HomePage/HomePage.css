@@ -2,9 +2,38 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 500px;
+    height: 400px;
     width: 1000px;
     margin: auto;
-    pointer-events: none;
 }
 
+.home_page-mission_statement {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 100%;
+    background-color: #684e9f;
+}
+.home_page-mission_statement span {
+    color: white;
+    text-align: center;
+}
+
+.home_page-templates {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    row-gap: 20px;
+    width: 1000px;
+    margin: 50px auto;
+}
+
+.home_page-dev_info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 100%;
+    background-color: #684e9f;
+}
