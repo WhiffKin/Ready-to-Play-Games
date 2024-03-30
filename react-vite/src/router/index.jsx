@@ -13,8 +13,8 @@ import CampaignTemplatesPage from '../components/CampaignTemplates/CampaignTempl
 import { CampaignTemplateProvider } from '../context/CampaignTemplate/CampaignTemplate';
 import CreateCampaignTemplate from '../components/CampaignTemplates/CreateCampaignTemplate/CreateCampaignTemplate';
 import NotFound from '../components/NotFound';
-import UpdateCampaignPage from '../components/Campaigns/UpdateCampaignPage/UpdateCampaignPage';
 import CampaignsPage from '../components/Campaigns/CampaignsPage';
+import HomePage from '../components/HomePage';
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <h1>Welcome!</h1>,
+        element: <HomePage />,
       },
       {
         path: "login",

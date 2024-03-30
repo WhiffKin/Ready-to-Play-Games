@@ -11,13 +11,7 @@ function Navigation() {
         </li>
         <div>
           <li>
-            <NavLink to="/characters">Characters</NavLink>
-          </li>
-          <li>
             <NavLink to="/characters/new">Create Character</NavLink>
-          </li>
-          <li>
-            <NavLink to="/templates">Campaign Templates</NavLink>
           </li>
           <li>
             <NavLink to="/templates/new">Create Campaign Template/Rooms</NavLink>

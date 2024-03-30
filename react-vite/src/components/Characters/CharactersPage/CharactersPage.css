@@ -1,9 +1,9 @@
+
 .character_page-container {
+    position: absolute;
     height: 200px;
     width: 200px;
-    transform: translate(0,0);
     background-color: antiquewhite;
-    cursor: pointer;
 }
 .character_page-container img {
     height: inherit;
