@@ -41,9 +41,9 @@ function CharactersPage() {
                 const lowDist = focusChar - (index + Math.floor(focusChar / characters.length) * characters.length);
 
                 let dist;
-                if (highDist < 2 && highDist > -2) dist = highDist; // handles end at ending of rotation
+                if (highDist < 2 && highDist > -2) dist = highDist; // handles beginning of list at ending of rotation
                 if (lowDist < 2 && lowDist > -2) dist = lowDist; // handles center
-                if (longDist < 2 && longDist >= -2) dist = longDist; // Handles end at the beginning of rotation
+                if (longDist < 2 && longDist >= -2) dist = longDist; // Handles ending of list at the beginning of rotation
                 if (!dist) return;
                 return (
                     <div 
@@ -54,7 +54,7 @@ function CharactersPage() {
                             "transform": `perspective(250px) 
                                           translate3D(${-dist * 350}px, 0, ${dist * dist * -50}px) 
                                           rotateY(${-dist / 2 * 30}deg)`,
-                            "zIndex": Math.abs(dist) != 2 ? 2 : 1,
+                            "zIndex": 0,
                         }}
                     >
                         <img src={character.sprite} alt={`${character.name} character sprite.`} />
