@@ -32,6 +32,7 @@ urllib3 = "==1.26.18"
 werkzeug = "==2.2.2"
 wtforms = "==3.0.1"
 zipp = "==3.17.0"
+flask-socketio = "*"
 
 [dev-packages]
 
